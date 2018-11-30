@@ -5,7 +5,7 @@ import numpy as np
 def get_latticepoints_unitsquare(N, dim):
 
 	# load generating vector
-	genvecold = np.loadtxt('vec.txt')
+	genvecold = np.loadtxt('/Users/nicholaskramer/Documents/GitHub/gp-emulators/quadratures/vec.txt')
 	genvecnew = genvecold[0:dim, 1]
 
 	# generate lattice points and random shift

@@ -6,9 +6,9 @@ import scipy.special
 import time
 from functools import partial
 
-from fem_new import solve_fem
-from lattice_new import get_latticepoints, qmc_integral
-from kernel import get_gppoints, build_kernelmatrix, maternrbf
+from fem.fem_1d import forward_operator_fem_1d
+from quadratures.quadratures import get_latticepoints_unitsquare, qmc_integral
+from kernels.kernel import get_gppoints, build_kernelmatrix, norm_diff, maternfunction
 
 # Set seed for random number generators
 np.random.seed(1)
@@ -44,8 +44,8 @@ sigma = 1.0
 
 
 # Method dependent resolutions
-h_fem = 1.0/32
-h_superfine = 1.0/1024
+h_fem = 1.0/32.0
+h_superfine = 1.0/1024.0
 N_gp_1d = dummy_gp
 N_qmc = 2**(12)
 
@@ -56,7 +56,12 @@ else:
 	observationpoints = np.linspace(0,1,J)
 
 # simplify some functions
-solvefem = partial(solve_fem, vec_J = observationpoints)
+solvefem = partial(forward_operator_fem_1d, vec_J = observationpoints)
+
+def maternrbf(x, y, NU, RHO, SIGMA, normorder = 2):
+	r = norm_diff(x, y, normorder)
+	return maternfunction(r, NU, RHO, SIGMA)
+
 maternkernel = partial(maternrbf, NU = nu, RHO = rho, SIGMA = sigma)
 
 
@@ -91,13 +96,12 @@ system_data = system_data + noise
 GP_grid = get_gppoints(N_gp_1d, K)
 GP_data = np.zeros((len(GP_grid), J))
 for i in range(len(GP_grid)):
-	GP_data[i,:] = solve_fem(GP_grid[i,:], h_fem, observationpoints)
+	GP_data[i,:] = forward_operator_fem_1d(GP_grid[i,:], h_fem, observationpoints)
 
 
 # build kernelmatrix
 M = build_kernelmatrix(GP_grid,GP_grid,maternkernel)
 
-print np.linalg.cond(M)
 # compute coefficients
 GP_coeff = np.linalg.solve(M, GP_data)
 
@@ -110,7 +114,8 @@ def evaluate_potential_approx(_P, _XXX, _kernel, _coefficients, _y, _sigmaeta):
 	return np.exp(-np.linalg.norm(_y-_GU)**2/(2*_sigmaeta))
 
 # Compute normalising constant Z_approx
-QMC_pointset = get_latticepoints(N_qmc, K)
+QMC_pointset = get_latticepoints_unitsquare(N_qmc, K)
+QMC_pointset = 2 * QMC_pointset - 1
 
 # turn into a function depending only on the point where the pom op is evaluated
 largedensity = partial(evaluate_potential_approx, _XXX = GP_grid, _kernel = maternkernel, _coefficients = GP_coeff, _y = system_data, _sigmaeta = measurement_error)
