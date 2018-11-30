@@ -1,7 +1,5 @@
-
 from __future__ import division	# division of integers into decimal numbers
 import numpy as np
-import matplotlib.pyplot as plt 
 import scipy.special
 import scipy.spatial
 import scipy.sparse
@@ -13,7 +11,7 @@ from scipy import interpolate
 # for \alpha(x,u) = \sum_{i=1}^K e^(a_i*x)
 # at coefficient a with mesh width h
 # and gives output measurements at pointset vec_J \subset [0,1]
-def solve_fem(a, h, vec_J):
+def forward_operator_fem_1d(a, h, vec_J):
 
 	def integral_exp(u, links, rechts):
 		integral = 0
