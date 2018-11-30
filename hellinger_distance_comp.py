@@ -1,6 +1,7 @@
 # This file compares the Hellinger distance of the true posterior density
 # and the approximate posterior density derive by 
-# a Gaussian process approximation
+# a Gaussian process approximation 
+# based on the deterministic mean
 
 # The underlying FEM is a 1d problem
 # The covariance structure is a Matern kernel
