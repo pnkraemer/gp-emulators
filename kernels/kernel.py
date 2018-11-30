@@ -1,10 +1,7 @@
 from __future__ import division	#division of integers into decimal
-import matplotlib.pyplot as plt 
 import numpy as np 
 import scipy.special
-from functools import partial
 import scipy.spatial
-
 
 
 
@@ -25,19 +22,23 @@ def get_gppoints(N, dim):
 
 #param_matern = [nu, rho, sigma] (alphabetically)
 def build_kernelmatrix(X, Y, kernel):
+	N1 = len(X)
+	N2 = len(Y)
 	M = np.zeros((len(X),len(Y)))
-	for i in range(len(X)):
-		for j in range(len(Y)):
+	for i in range(N1):
+		for j in range(N2):
 			M[i,j] = kernel(X[i,:], Y[j,:])
 	return M
 
 
+def norm_diff(x, y, ORD = None):
+	return np.linalg.norm(x-y, ord = ORD)
+
 # define kernelfunction: maternkernel and fix parameters
-def maternrbf(x, y, NU, RHO, SIGMA):
-	if np.linalg.norm(x-y) == 0:
+def maternfunction(r, NU, RHO, SIGMA):
+	if r <= 0:
 		return SIGMA**2
 	else:
- 		r = np.linalg.norm(x-y)
  		z = np.sqrt(2*NU)*r / RHO
  		a = SIGMA**2 * 2**(1-NU) / scipy.special.gamma(NU)
 		return a * z**(NU) * scipy.special.kv(NU, z)
