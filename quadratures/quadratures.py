@@ -1,7 +1,5 @@
 from __future__ import division	#division of integers into decimal
-import matplotlib.pyplot as plt 
 import numpy as np 
-from functools import partial
 
 # Computes the lattice points for qmc integration
 def get_latticepoints_unitsquare(N, dim):
