@@ -4,7 +4,7 @@ import numpy as np
 from functools import partial
 
 # Computes the lattice points for qmc integration
-def get_latticepoints(N, dim):
+def get_latticepoints_unitsquare(N, dim):
 
 	# load generating vector
 	genvecold = np.loadtxt('vec.txt')
@@ -16,7 +16,6 @@ def get_latticepoints(N, dim):
 	shift = np.random.rand(dim)
 	for i in range(N):
 		pts[i,:] = (genvecnew * i / N  + shift)% 1
-		pts[i,:] = 2 * pts[i,:] - 1
 
 	return pts
 

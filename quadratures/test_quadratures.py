@@ -1,12 +1,11 @@
-from __future__ import division	#division of integers into decimal
-import matplotlib.pyplot as plt 
+from __future__ import division	# division of integers into decimal
+
 import numpy as np 
-from functools import partial
-
-from lattice_new import qmc_integral, get_latticepoints
+from quadratures import qmc_integral, get_latticepoints_unitsquare
 
 
-def F(x, a, b):
+# define a testfunction
+def F(x, a = 1, b = 2):
 	return a*np.prod(x) + b*np.sum(x)
 
 
@@ -15,15 +14,17 @@ def F(x, a, b):
 print "\nHow many QMC-points?"
 N = input("Enter:  ")
 
+
 print "\nWhich dimension?"
 dim = input("Enter:  ")
 
-P = get_latticepoints(N, dim)
+
+P = get_latticepoints_unitsquare(N, dim)
+P = 2 * P - 1
 
 
-F_reduced = partial(F, a=1, b=2)
-integral = qmc_integral(F_reduced,P)
+integral = qmc_integral(F,P)
 
 
-print "\nqmc-sol =", integral
+print "\nqmc-sol =", '{:.2e}'.format(integral)
 print ""
