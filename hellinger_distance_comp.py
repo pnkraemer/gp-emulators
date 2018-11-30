@@ -3,12 +3,16 @@
 # a Gaussian process approximation 
 # based on the deterministic mean
 
+
+
 # The underlying FEM is a 1d problem
 # The covariance structure is a Matern kernel
 # The integrals are approximated with QMC
 # on a randomly shifted lattice
 # The GP approximation is on a uniform tensor grid
 
+# Reference:
+# https://arxiv.org/abs/1603.02004
 
 from __future__ import division	# division of integers into decimal numbers
 import numpy as np
