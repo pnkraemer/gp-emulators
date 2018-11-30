@@ -3,11 +3,15 @@ from __future__ import division	# division of integers into decimal numbers
 import numpy as np
 import matplotlib.pyplot as plt
 
-from fem_new import forward_operator_fem_1d
+from fem_1d import forward_operator_fem_1d
 
 
 # determine FEM parameters
-h = 1.0/1234
+print "\nWhich mesh-width h? (e.g. h = 1.0/1024)"
+h = input("Enter:  ")
+print ""
+
+# Determine parameters
 a = np.array([1.0, 1.0, 2.0])
 J = np.linspace(0,1,111)
 
