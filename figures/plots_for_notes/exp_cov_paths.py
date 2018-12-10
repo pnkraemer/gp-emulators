@@ -30,8 +30,13 @@ Z3[:,1] = np.random.multivariate_normal(m,K)
 Z4[:,1] = np.random.multivariate_normal(m,K)
 Z5[:,1] = np.random.multivariate_normal(m,K)
 
-np.savetxt('exponcov1.txt', Z1)
-np.savetxt('exponcov2.txt', Z2)
-np.savetxt('exponcov3.txt', Z3)
-np.savetxt('exponcov4.txt', Z4)
-np.savetxt('exponcov5.txt', Z5)
+for i in range(5):
+	Z1[:,1] = np.random.multivariate_normal(m,K)
+	plt.plot(Z1[:,0], Z1[:,1])
+
+plt.show()
+# np.savetxt('exponcov1.txt', Z1)
+# np.savetxt('exponcov2.txt', Z2)
+# np.savetxt('exponcov3.txt', Z3)
+# np.savetxt('exponcov4.txt', Z4)
+# np.savetxt('exponcov5.txt', Z5)
