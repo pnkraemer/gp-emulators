@@ -239,16 +239,32 @@ The input pointsets need to have the same dimension, but do not need to match in
 
 
 \subsection{Pointsets}
-I collect different strategies to construct pointsets such as random points, Halton points and more in the file \texttt{ptSetFcts.py}. The input is always the overall number of points and the desired dimension. The output is always a pointset in $[0,1]^d$, if not specified otherwise. The function names start with \texttt{getPts}, as in for example \texttt{getPtsHalton} or \texttt{getPtsFibonacci}.
+I collect different strategies to construct pointsets such as random points, Halton points and more in the file \texttt{ptSetFcts.py}. The input is always the \textbf{overall number of points} and the desired dimension as in:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+def getPtsHalton(size, dim):
+	[...]
+	return np.array(seq).T
+\end{Verbatim}
+The output is always a pointset in $[0,1]^d$, if not specified otherwise. The function names start with \texttt{getPts}, as in for example \texttt{getPtsHalton} or \texttt{getPtsFibonacci}.
 
 
 \subsection{Quadratures}
-I collect different quadrature formulas, such as Quasi-Monte Carlo, Monte Carlo or kernel quadrature in the file \texttt{quadrForm.py}.
+I collect different quadrature formulas, such as Quasi-Monte Carlo, Monte Carlo or kernel quadrature in the file \texttt{quadrForm.py}. The titles of the functions always start with \texttt{compQuad}, such as \texttt{compQuadQMC} or \texttt{compQuadMC}. The formulas take as an input the integrand and the pointset as in:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+def compQuadQMC(integrand, ptSet):
+	[...]
+	for idx in range(numPts):
+		qmcSum = qmcSum + integrand(ptSet[idx,:])
+	return qmcSum/(N * 2.0**dim)
+\end{Verbatim}
+The reason for choosing this over an on-the-fly computation is the readibility of the code. The integrand is supposed to take a single vector as an input which is supposed to make it dimension-independent. \\
+
+Do not forget to adjust the integrand according to the measure (especially factors like $\frac{1}{|A|^d}$). 
 
 
 \subsection{Forward models}
 I collect different forward models, such as PDE-based forward models in the file \texttt{forwMdls.py}.
-
+The input is the vector of input parameters. The outputs are all \textbf{evaluation-based}, hence the output vector contains the evaluation points. The names of the forward models always start with \texttt{compForw}, as in \texttt{compForwFEM}.
 
 
 
