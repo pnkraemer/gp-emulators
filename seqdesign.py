@@ -33,7 +33,7 @@ def gaussianCov(x,y):
 	return np.exp(-np.linalg.norm(x-y)**2/2)
 
 def trueForwardMap(a):
-	return np.sin(2*3.14159265*a)
+	return np.sin(2*np.pi*a) + np.random.rand()*2-1
 
 def monteCarlo(function, numPts):
 	currEst = 0
@@ -41,6 +41,19 @@ def monteCarlo(function, numPts):
 		pt = np.random.rand(1)[0]
 		currEst = currEst + function(pt)
 	return 1.0*currEst/numPts
+
+def monteCarloVar(function, numPts, newVar):
+	currEstMean = 0
+	for idx in range(numPts):
+		pt = np.random.rand(1)[0]
+		currEstMean = currEstMean + function(pt)
+	mean = 1.0*currEstMean/numPts
+
+	currEstVar = 0
+	for idx in range(numPts):
+		pt = np.random.normal(0, newVar, 1)
+		currEstVar = currEstVar + (function - mean)**2
+	return currEstVar/numPts
 
 
 
@@ -66,47 +79,76 @@ def testFct(x):
 	return 1.0*x**2
 
 
-GPgrid = np.linspace(0, 1, 3)
+# GPgrid = np.linspace(0, 1, 3)
 
 
 
-kernMtrx = np.zeros((len(GPgrid), len(GPgrid)))
-for idx in range(len(GPgrid)):
-	for jdx in range(len(GPgrid)):
-		kernMtrx[idx, jdx] = gaussianCov(GPgrid[idx], GPgrid[jdx])
+# kernMtrx = np.zeros((len(GPgrid), len(GPgrid)))
+# for idx in range(len(GPgrid)):
+# 	for jdx in range(len(GPgrid)):
+# 		kernMtrx[idx, jdx] = gaussianCov(GPgrid[idx], GPgrid[jdx])
 
-invKernMtrx = np.linalg.inv(kernMtrx)
-def newCov(x,y, iNvKernMtrx = invKernMtrx, A = GPgrid):
-	kA = np.zeros((len(A), 1))
-	kB = np.zeros((1, len(A)))
-	for idx in range(len(A)):
-		kA[idx, 0] = gaussianCov(x, A[idx])
-		kB[0, idx] = gaussianCov(A[idx], y)
-	return gaussianCov(x,y) - kA.T.dot(iNvKernMtrx).dot(kB.T)
+# invKernMtrx = np.linalg.inv(kernMtrx)
 
 
-def bayesRisk(a0, y, Kn, Kn2, A, sigma = noiseVar):
+# def newCov(x,y, iNvKernMtrx = invKernMtrx, A = GPgrid):
+# 	kA = np.zeros((len(A), 1))
+# 	kB = np.zeros((1, len(A)))
+# 	for idx in range(len(A)):
+# 		kA[idx, 0] = gaussianCov(x, A[idx])
+# 		kB[0, idx] = gaussianCov(A[idx], y)
+# 	return gaussianCov(x,y) - kB.dot(iNvKernMtrx).dot(kA)
+
+def mean(a):
+	return 0
+
+def bayesRisk(an1, y, mn0fct, kn0fct, sigma = noiseVar):
+	
+	def kn1fct(c,d, kn0 = kn0fct, A0 = an1):
+		return kn0(c,d) - (kn0(c,A0)*kn0(A0,d))/(kn0(A0, A0))
+
 	def integrand(a):
-		a1 = (y*Kn(a,a0)**2)/(2*(Kn(a,a0)**2)/(Kn(a0, a0)) + Kn2(a,a) + sigma**2)
-		a2 = np.exp(-a1)
-		b1 = np.sqrt(2*(Kn(a,a0)**2)/(Kn(a0, a0))*(Kn2(a,a) + sigma**2))
-		b2 = b1 + Kn2(a,a) + sigma**2
-		return b2/a2
-	integral = monteCarlo(integrand, 5000)
-	return integral/(np.sqrt(Kn(a0, a0)))
+		mn0a = mn0fct(a)
+		mn0an1 = mn0fct(an1)
+		kn0aan1 = kn0fct(a,an1)
+		kn0an1an1 = kn0fct(an1, an1)
+		kn1aa = kn1fct(a,a)
+
+		A = mn0a - kn0aan1*mn0an1/kn0an1an1
+		B = kn0aan1/kn0an1an1
+
+		s1 = 2*((kn0aan1)**2)/(kn0an1an1)
+		s2 = kn1aa + sigma**2
+		s = np.sqrt(2*np.pi*(s1 + s2))
+		print "s", s
+		e1 = ((y-A)**4)/(s2)
+		e2 = (mn0an1**2)/(2*kn0an1an1)
+		e3 = (B*(y-A)**2)/(s2) + (mn0an1)/(2*kn0an1an1)
+		e = np.exp(-e1 - e2 + e3**2)
+		print "e1", e1
+		print "e2", e2
+		print "e3", e3
+		print "e", e
+		return e/s
+
+	return monteCarlo(integrand, 10000)
+
+plt.figure()
 plt.plot(grid01, postDensOnGrid, color="red", linewidth = 2)
 plt.grid()
 plt.show()
 
-testGrid = np.linspace(0,1,5)
+
+
+testGrid = np.linspace(0,1,6)
 BRgrid = np.zeros(len(testGrid))
 for idx in range(len(testGrid)):
-	BRgrid[idx] = bayesRisk(testGrid[idx], observation, gaussianCov, newCov, GPgrid)
+	BRgrid[idx] = bayesRisk(testGrid[idx], observation, mean, gaussianCov)
 
 
 print "BR =", BRgrid
+plt.figure()
 plt.plot(testGrid, BRgrid, 'o')
-plt.ylim((0,1))
 plt.show()
 
 print ""
