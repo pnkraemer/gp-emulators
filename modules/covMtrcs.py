@@ -33,26 +33,6 @@ def buildCovMtrx(ptSetOne, ptSetTwo, covFct):
 			covMtrx[idx,jdx] = covFct(ptSetOne[idx,:], ptSetTwo[jdx,:])
 	return covMtrx
 
-def buildCovMtrxCond(ptSetOne, ptSetTwo, covFct, polOrder = 1):
-	lenPtSetOne = len(ptSetOne)
-	lenPtSetTwo = len(ptSetTwo)
-	dim = len(ptSetOne.T)
-	covMtrx = np.zeros((lenPtSetOne + dim *polOrder + 1, lenPtSetTwo + dim *polOrder + 1))
-	for idx in range(lenPtSetOne):
-		for jdx in range(lenPtSetTwo):
-			covMtrx[idx,jdx] = covFct(ptSetOne[idx,:], ptSetTwo[jdx,:])
-		for jdx in range(polOrder):
-			covMtrx[idx, lenPtSetTwo] = 1
-			for kdx in range(dim):
-				covMtrx[idx, lenPtSetTwo + dim*jdx + kdx + 1] = ptSetOne[idx,kdx]**(jdx+1)
-	for idx in range(lenPtSetTwo):
-		covMtrx[lenPtSetOne, idx] = 1
-		for jdx in range(polOrder):
-			for kdx in range(dim):
-				covMtrx[lenPtSetOne + dim*jdx + kdx + 1, idx] = ptSetTwo[idx,kdx]**(jdx+1)
-	return covMtrx
-
-
 
 
 

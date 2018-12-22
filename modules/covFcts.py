@@ -30,11 +30,3 @@ def maternCov(ptOne, ptTwo, maternReg, maternScale = 1.0, maternCorrLength = 1.0
 def expCov(ptOne, ptTwo, lengthScale = 1.0):
 	distPts = np.linalg.norm(ptOne - ptTwo)
 	return np.exp(-distPts/(lengthScale))
-
-def tpsCov(ptOne, ptTwo):
-	distPts = np.linalg.norm(ptOne - ptTwo)
-	if distPts <= 0:
-		return 0
-	else:
-		return distPts**2 * np.log(distPts)
-
