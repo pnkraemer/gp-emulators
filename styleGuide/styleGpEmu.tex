@@ -62,7 +62,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This guide collects any standardisation I have come up with over time. On top of that, I mention other guidelines, like naming conventions, structure conventions and more, most of which I have learned the hard way.
+This guide collects any standardisation I have come up with over time. On top of that, I mention other guidelines, like naming conventions, structure conventions and more, most of which I have learned the hard way. Many things are adapted from \texttt{rbf-tools}. 
 \end{abstract}
 \begin{figure}[h]
 \centering
@@ -76,7 +76,7 @@ This guide collects any standardisation I have come up with over time. On top of
 
 \section{Purpose of the module}
 
-The purpose of the module is to collect most of the things I have programmed in the past 18 months with regard to radial basis functions. Resuability is a driving force of most of the modules. Many features have to be used in almost every script; for instance, building a kernel matrix. I got sick of doing it from scratch everytime, hence I started this collection. \\
+The purpose of the module is to collect most of the things I have programmed in the past 18 months with regard to radial basis functions. Resuability is a driving force of most of the modules. Many features have to be used in almost every script; for instance, building a covariance matrix. I got sick of doing it from scratch everytime, hence I started this collection. \\
 
 In the context of Gaussian process emulators, one has to use a wide range of tools: PDE solvers, quadrature formulas, radial basis function interpolation, sampling according to probability distributions and more. This collection is supposed to allow combining any number of these easily. 
 
@@ -167,7 +167,7 @@ An exemplary header is the following, taken from \texttt{'interpolMatern1d.py'}:
 \subsection{Unification}
 The following is a list of most naming conventions regarding a unified system:
 \begin{enumerate}
-\item \textbf{Kernel functions:} I refer to kernel functions and kernel matrices using \texttt{kernel}, not \texttt{kern} nor \texttt{cov}
+\item \textbf{Covariance functions:} I refer to covariance functions and covariance matrices using \texttt{cov}, not \texttt{kern} nor \texttt{kernel}; the functions themselves are the same, however.
 \item \textbf{Common Abbreviations:} I use as common abbreviations:
 \begin{itemize}
 \item Indices: \texttt{idx}, \texttt{jdx}, \texttt{kdx}, ...
@@ -181,8 +181,8 @@ The following is a list of most naming conventions regarding a unified system:
 \item Lebesgue constant: \texttt{lebCnst}
 \item Expression: \texttt{expr} (as in \texttt{exprSol}) 
 \item Collocation: \texttt{coll} (as in \texttt{collMtrx}) 
-\item Gaussian: \texttt{gauss} (as in \texttt{gaussKernel} instead of \texttt{gaussianKernel})
-\item Higher order thin-plate splines (polyharmonic kernels): \texttt{tps1Kernel} for $r^1\log(r)$, \texttt{tps2Kernel} for $r^2\log(r)$, \texttt{tps3Kernel} for $r^3\log(r)$, ...
+\item Gaussian: \texttt{gauss} (as in \texttt{gaussCov} instead of \texttt{gaussianCov})
+\item Higher order thin-plate splines (polyharmonic covariances): \texttt{tps1Cov} for $r^1\log(r)$, \texttt{tps2Cov} for $r^2\log(r)$, \texttt{tps3Cov} for $r^3\log(r)$, ...
 \end{itemize}
 \end{enumerate}
 
@@ -210,32 +210,32 @@ In the following I describe some module files and their conventions.
 
 
 
-\subsection{Kernel functions}
-	\label{subsec:kernelFcts}
-I collect kernel functions in the file \texttt{kernelFcts.py}. They all take two points as inputs and give out a scalar. As an example, the Gaussian:
+\subsection{Covariance functions}
+	\label{subsec:covFcts}
+I collect covariance functions in the file \texttt{covFcts.py}. They all take two points as inputs and give out a scalar. As an example, the Gaussian:
 \begin{Verbatim}[formatcom=\color{blue!50!black}]
-def gaussKernel(ptOne, ptTwo, lengthScale = 1.0):
+def gaussCov(ptOne, ptTwo, lengthScale = 1.0):
     distPts = np.linalg.norm(ptOne - ptTwo)
     return np.exp(-distPts**2/(2*lengthScale**2))
 \end{Verbatim}
 
-The distance of the two inputs, \texttt{ptOne} and \texttt{ptOne}, is computed inside the function. The purpose of this is that I can construct kernel matrices in a very easy manner; see subsection \ref{subsec:kernelMtrcs}
+The distance of the two inputs, \texttt{ptOne} and \texttt{ptOne}, is computed inside the function. The purpose of this is that I can construct covariance matrices in a very easy manner; see subsection \ref{subsec:covMtrcs}
 
-\subsection{Kernel matrices}
-\label{subsec:kernelMtrcs}
-I collect kernel matrices in the file \texttt{kernelMtrcs.py}. The all take two pointsets as inputs and return a matrix. As an example, the standard kernel matrix: 
+\subsection{Covariance matrices}
+\label{subsec:covMtrcs}
+I collect covariance matrices in the file \texttt{kernelMtrcs.py}. The all take two pointsets as inputs and return a matrix. As an example, the standard covariance matrix: 
 \begin{Verbatim}[formatcom=\color{blue!50!black}]
-def buildKernelMtrx(ptSetOne, ptSetTwo, kernelFct):
+def buildCovMtrx(ptSetOne, ptSetTwo, covFct):
     lenPtSetOne = len(ptSetOne)
     lenPtSetTwo = len(ptSetTwo)
-    kernelMtrx = np.zeros((lenPtSetOne, lenPtSetTwo))
+    covMtrx = np.zeros((lenPtSetOne, lenPtSetTwo))
     for idx in range(lenPtSetOne):
         for jdx in range(lenPtSetOne):
-            kernelMtrx[idx,jdx] = kernelFct(ptSetOne[idx,:], ptSetTwo[jdx,:])
-    return kernelMtrx
+            covMtrx[idx,jdx] = covFct(ptSetOne[idx,:], ptSetTwo[jdx,:])
+    return covMtrx
 \end{Verbatim}
 
-The input pointsets need to have the same dimension, but do not need to match in size. The kernel function \texttt{kernelFct} needs to be of the form I described in subsection \ref{subsec:kernelFcts}
+The input pointsets need to have the same dimension, but do not need to match in size. The covariance function \texttt{covFct} needs to be of the form I described in subsection \ref{subsec:covFcts}
 
 
 \subsection{Pointsets}
@@ -249,7 +249,7 @@ The output is always a pointset in $[0,1]^d$, if not specified otherwise. The fu
 
 
 \subsection{Quadratures}
-I collect different quadrature formulas, such as Quasi-Monte Carlo, Monte Carlo or kernel quadrature in the file \texttt{quadrForm.py}. The titles of the functions always start with \texttt{compQuad}, such as \texttt{compQuadQMC} or \texttt{compQuadMC}. The formulas take as an input the integrand and the pointset as in:
+I collect different quadrature formulas, such as Quasi-Monte Carlo, Monte Carlo or covariance quadrature in the file \texttt{quadrForm.py}. The titles of the functions always start with \texttt{compQuad}, such as \texttt{compQuadQMC} or \texttt{compQuadMC}. The formulas take as an input the integrand and the pointset as in:
 \begin{Verbatim}[formatcom=\color{blue!50!black}]
 def compQuadQMC(integrand, ptSet):
 	[...]

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.8.26)  22 DEC 2018 10:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.8.26)  22 DEC 2018 10:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -696,11 +696,11 @@ Package rerunfilecheck Info: File `styleGpEmu.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 325.
  ) 
 Here is how much of TeX's memory you used:
- 16512 strings out of 493089
- 309433 string characters out of 6134842
- 377508 words of memory out of 5000000
- 19676 multiletter control sequences out of 15000+600000
- 13751 words of font info for 54 fonts, out of 8000000 for 9000
+ 16513 strings out of 493089
+ 309442 string characters out of 6134842
+ 377516 words of memory out of 5000000
+ 19677 multiletter control sequences out of 15000+600000
+ 13919 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,12n,54p,413b,1119s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
@@ -716,7 +716,7 @@ xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texl
 ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive
 /2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on styleGpEmu.pdf (6 pages, 158273 bytes).
+Output written on styleGpEmu.pdf (6 pages, 158095 bytes).
 PDF statistics:
  168 PDF objects out of 1000 (max. 8388607)
  140 compressed objects within 2 object streams
