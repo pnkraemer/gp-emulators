@@ -1,0 +1,309 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin = 30mm]{geometry}
+\usepackage{abstract}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{amssymb}
+
+
+
+\setlength\parindent{0pt}
+\frenchspacing
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linktoc = all,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\titleformat{\section}{\center\bf \large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\center\bf}{\thesubsection.}{0.5em}{}
+
+
+
+\newcommand{\localtextbulletone}{\textcolor{gray!50!black}{\raisebox{.35ex}{\footnotesize$\bullet$}}}
+\renewcommand{\labelitemi}{\localtextbulletone}
+
+
+
+\titlecontents{section}
+	[0pt]
+	{ }
+	{\contentsmargin{0pt}\thecontentslabel.\enspace\normalsize}
+	{\contentsmargin{0pt}\normalsize\MakeUppercase}
+	{\titlerule*[.5pc]{}\contentspage}
+	[]
+
+\titlecontents{subsection}
+	[15pt]
+	{ }
+	{\contentsmargin{0pt}\thecontentslabel\enspace\normalsize}
+	{\contentsmargin{0pt}\normalsize\MakeUppercase}
+	{\titlerule*[.5pc]{}\contentspage}
+	[]
+
+
+
+
+
+\setcounter{tocdepth}{1}
+
+\title{Standardisation Guide for ``\texttt{gp-emulators}''}
+\author{N.K. - \texttt{kraemer@ins.uni-bonn.de}}
+\begin{document}
+\maketitle
+\begin{abstract}
+This guide collects any standardisation I have come up with over time. On top of that, I mention other guidelines, like naming conventions, structure conventions and more, most of which I have learned the hard way.
+\end{abstract}
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.5\textwidth}
+\tableofcontents
+\end{minipage}
+\end{figure}
+
+
+
+
+\section{Purpose of the module}
+
+The purpose of the module is to collect most of the things I have programmed in the past 18 months with regard to radial basis functions. Resuability is a driving force of most of the modules. Many features have to be used in almost every script; for instance, building a kernel matrix. I got sick of doing it from scratch everytime, hence I started this collection. \\
+
+In the context of Gaussian process emulators, one has to use a wide range of tools: PDE solvers, quadrature formulas, radial basis function interpolation, sampling according to probability distributions and more. This collection is supposed to allow combining any number of these easily. 
+
+
+
+\section{Hierarchy}
+The hierarchy is supposed to be as flat as possible. However, we need to separate certain formulas for the aforementioned reusability purposes.
+
+\begin{figure}[h]
+\centering
+\tikzstyle{every node}=[draw=black, thick,anchor=west]
+\tikzstyle{module}=[draw=black, fill=blue!10!white]
+\tikzstyle{script}=[draw=black, fill=green!10!white]
+\tikzstyle{optional}=[dashed,fill=gray!50]
+\begin{tikzpicture}[%
+  	grow via three points={one child at (0.5,-0.7) and
+  	two children at (0.5,-0.7) and (0.5,-1.4)},
+  	edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]	
+	\node {gp-emulators}
+		child { node {modules}
+    			child { node[module] {\texttt{kernelFcts.py}}}		
+    			child { node[module] {\texttt{kernelMtrcs.py}}}		
+    			child { node[module] {\texttt{ptSetFcts.py}}}		
+    			child { node[module] {\texttt{quadrForm.py}}}		
+    			child { node[module] {\texttt{forwMdls.py}}}		
+			}
+			child[missing] {}
+			child[missing] {}
+			child[missing] {}
+			child[missing] {}
+			child[missing] {}
+    		child { node {styleGuide}}
+		child { node {compPostDens}
+    			child { node[script] {\texttt{compPostDensHell.py}}}
+			}
+			child[missing] {}
+		child { node {gpVisual}
+    			child { node[script] {\texttt{gpVisual.py}}}
+			}
+			child[missing] {};
+\end{tikzpicture}
+\caption{File structure of \texttt{rbf-tools}; modules in blue, scripts in green}
+\label{fig:hierarchy}
+\end{figure}
+
+
+\section{Naming and coding conventions}
+I follow naming conventions with two purposes in mind:
+\begin{enumerate}
+\item Good programming practice
+\item Unification
+\end{enumerate}
+
+\subsection{Good naming practice}
+The following is a list of most naming conventions regarding good practices:
+\begin{enumerate}
+\item \textbf{Variable naming:} 
+\begin{itemize}
+\item \textbf{Descriptive naming:} do not use \texttt{x}, \texttt{N} or \texttt{K}, but \texttt{pt}, \texttt{numPts} or \texttt{kernelMtrx}
+\item \textbf{Short names:} do not use \texttt{standardKernelMatrixWithMaternKernel}, but \texttt{kernelMtrx}
+\item No underscores (system variables)
+\item No all-uppercase variables (system variables)
+\item Indicate new ``term'' with a single uppercase letter: \texttt{kernelFct}, \texttt{kernelMtrx}, \texttt{ptSet}
+\end{itemize}
+\item \textbf{Commenting:} As long as the variables are named well, I do not need comments except for very few occasions
+\item \textbf{Function naming:} verb-noun scheme, i.e. \texttt{buildKernelMtrx}, \texttt{getPtSet}, ...
+\item \textbf{File naming:} Each file has to include the following information:
+\begin{enumerate}
+\item \textbf{Name:} e.g. \texttt{'interpolation.py'}
+\item \textbf{Purpose:} Describe the purpose of the file in a single sentence (if that is not possible, think again about starting this file at all)
+\item \textbf{Description:} Describe the method in two or three sentences giving the main keywords
+\item \textbf{Author:} Usually me
+\end{enumerate}
+An exemplary header is the following, taken from \texttt{'interpolMatern1d.py'}:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+# NAME: 'interpolMatern1d.py'
+#
+# PURPOSE: Basic 1-dimensional interpolation using Matern functions
+#
+# DESCRIPTION: I solve a system involving a Matern-kernel matrix 
+# where the Matern kernel is based on scipy.special's functions
+# and plot the 10-th Lagrange function.
+#
+# AUTHOR: NK, kraemer(at)ins.uni-bonn.de
+\end{Verbatim}
+\end{enumerate}
+
+\subsection{Unification}
+The following is a list of most naming conventions regarding a unified system:
+\begin{enumerate}
+\item \textbf{Kernel functions:} I refer to kernel functions and kernel matrices using \texttt{kernel}, not \texttt{kern} nor \texttt{cov}
+\item \textbf{Common Abbreviations:} I use as common abbreviations:
+\begin{itemize}
+\item Indices: \texttt{idx}, \texttt{jdx}, \texttt{kdx}, ...
+\item Point: \texttt{pt}
+\item Pointset: \texttt{ptSet}
+\item Numer of points: \texttt{numPts}
+\item Matrix: \texttt{mtrx}, matrices: \texttt{mtrcs}
+\item Length of a vector called \texttt{vecAbc}: \texttt{lenVecAbc}
+\item Pointset for evaluation (plotting): \texttt{evalPtSet}
+\item Number of evaluation points: \texttt{numEvalPts}
+\item Lebesgue constant: \texttt{lebCnst}
+\item Expression: \texttt{expr} (as in \texttt{exprSol}) 
+\item Collocation: \texttt{coll} (as in \texttt{collMtrx}) 
+\item Gaussian: \texttt{gauss} (as in \texttt{gaussKernel} instead of \texttt{gaussianKernel})
+\item Higher order thin-plate splines (polyharmonic kernels): \texttt{tps1Kernel} for $r^1\log(r)$, \texttt{tps2Kernel} for $r^2\log(r)$, \texttt{tps3Kernel} for $r^3\log(r)$, ...
+\end{itemize}
+\end{enumerate}
+
+
+\subsection{Other good practices}
+\begin{enumerate}
+\item \textbf{Functions:}
+\begin{itemize}
+\item Each function should serve \textbf{a single} purpose which should be clear from the naming
+\item Each function should be deterministic, i.e. two runs with the same input give the same output (this type of function is called pure function). In my case this often depends on random numbers; see next point
+\end{itemize}
+\item \textbf{Seeds for random numbers:} Each file should always give the same result as long as nothing is changed. Hence, start everything that includes random numbers with \texttt{np.random.seed(15051994)} and do not set another seed elsewhere
+\item \textbf{Readability:} Readability of a program often trumps slight performance improvements
+\item \textbf{Parameters:} If a simulation is to be run with different parameters, let the script ask for the parameter as in:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+print "\nWhich regularity of the Matern function? (e.g. 2.0)"
+maternReg = input("Enter: ")
+\end{Verbatim}
+Do not change them in the script--it turned out to be quite confusing in the past
+\end{enumerate}
+
+\section{Modules}
+
+In the following I describe some module files and their conventions.
+
+
+
+\subsection{Kernel functions}
+	\label{subsec:kernelFcts}
+I collect kernel functions in the file \texttt{kernelFcts.py}. They all take two points as inputs and give out a scalar. As an example, the Gaussian:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+def gaussKernel(ptOne, ptTwo, lengthScale = 1.0):
+    distPts = np.linalg.norm(ptOne - ptTwo)
+    return np.exp(-distPts**2/(2*lengthScale**2))
+\end{Verbatim}
+
+The distance of the two inputs, \texttt{ptOne} and \texttt{ptOne}, is computed inside the function. The purpose of this is that I can construct kernel matrices in a very easy manner; see subsection \ref{subsec:kernelMtrcs}
+
+\subsection{Kernel matrices}
+\label{subsec:kernelMtrcs}
+I collect kernel matrices in the file \texttt{kernelMtrcs.py}. The all take two pointsets as inputs and return a matrix. As an example, the standard kernel matrix: 
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+def buildKernelMtrx(ptSetOne, ptSetTwo, kernelFct):
+    lenPtSetOne = len(ptSetOne)
+    lenPtSetTwo = len(ptSetTwo)
+    kernelMtrx = np.zeros((lenPtSetOne, lenPtSetTwo))
+    for idx in range(lenPtSetOne):
+        for jdx in range(lenPtSetOne):
+            kernelMtrx[idx,jdx] = kernelFct(ptSetOne[idx,:], ptSetTwo[jdx,:])
+    return kernelMtrx
+\end{Verbatim}
+
+The input pointsets need to have the same dimension, but do not need to match in size. The kernel function \texttt{kernelFct} needs to be of the form I described in subsection \ref{subsec:kernelFcts}
+
+
+\subsection{Pointsets}
+I collect different strategies to construct pointsets such as random points, Halton points and more in the file \texttt{ptSetFcts.py}. The input is always the overall number of points and the desired dimension. The output is always a pointset in $[0,1]^d$, if not specified otherwise. The function names start with \texttt{getPts}, as in for example \texttt{getPtsHalton} or \texttt{getPtsFibonacci}.
+
+
+\subsection{Quadratures}
+I collect different quadrature formulas, such as Quasi-Monte Carlo, Monte Carlo or kernel quadrature in the file \texttt{quadrForm.py}.
+
+
+\subsection{Forward models}
+I collect different forward models, such as PDE-based forward models in the file \texttt{forwMdls.py}.
+
+
+
+
+
+
+\section{Plotting}
+
+Visualisations (plots) tend to be more informative than printed results. The reason is that a plot can be stored easily and therefore, the information does not get lost. Every plot needs to have:
+\begin{itemize}
+\item \textbf{Axes labels:} not ``\texttt{x}'' and ``\texttt{y}'' but something like ``\texttt{Distance to center}'' and ``\texttt{Lagrange function value}''
+\item \textbf{Title:} Keep it short, like ``\texttt{Lagrange function decay}''
+\item \textbf{Grid:} Necessary as soon as numerical information is supposed to be taken from the plot
+\item \textbf{Legend:} Put details in the legend, like number of points or underlying regularity; it seems easiest to label each plot as in:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+plt.semilogy(..., linewidth = 2, label = "acc = %.1e"%(rileyAcc))
+\end{Verbatim}
+and then to add a legend via
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+plt.legend()
+\end{Verbatim}
+The reason is that this way, the legend entries are consistent with the data.
+\end{itemize}
+On top of that, for aesthetic purposes, I tend to follow:
+\begin{enumerate}
+\item \textbf{Font size:} Change font size to e.g. 18 by adding
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+plt.rcParams.update({'font.size': 18})
+\end{Verbatim}
+to the top of each script
+\item \textbf{Line width:} Increase line width and markersize, e.g. \verb+linewidth = 2+ and \verb+markersize = 8+
+\item \textbf{Color:} Main color is \texttt{darkslategray} which seems like a decent tradeoff between color and simplicity; as a complementary color I use \texttt{red} which is a tad lighter than its true complementary color
+\item \textbf{Opacity:} Put the opacity value to \verb+alpha = 0.8+ which is less aggressive
+\item \textbf{Legend:} A slight shadow seems nice:
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+plt.legend(shadow = True)
+\end{Verbatim}
+\item \textbf{Saving:} Save plots into files automatically via for example
+\begin{Verbatim}[formatcom=\color{blue!50!black}]
+plt.savefig("figures/titleOfScript/fctValues.png")
+\end{Verbatim}
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
