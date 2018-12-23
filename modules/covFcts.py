@@ -1,6 +1,6 @@
-# NAME: 'kernelFcts.py'
+# NAME: 'covFcts.py'
 #
-# PURPOSE: Collection of different kernel functions
+# PURPOSE: Collection of different covariance functions
 #
 # DESCRIPTION: see PURPOSE
 #

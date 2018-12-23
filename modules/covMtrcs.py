@@ -1,6 +1,6 @@
-# NAME: 'kernelMtrcs.py'
+# NAME: 'covMtrcs.py'
 #
-# PURPOSE: Collection of scripts to construct kernel matrices
+# PURPOSE: Collection of scripts to construct covariance matrices
 #
 # DESCRIPTION: see PURPOSE
 #
