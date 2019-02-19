@@ -1,4 +1,4 @@
-# FILENAME: sampleEvolBasic.py
+# FILENAME: burnInInitState.py
 # PURPOSE: playground for basic mcmc 
 # DESCRIPTION: set up a toy example for mcmc sampling and approximate with Metropolis sampler
 # AUTHOR: NK
@@ -12,6 +12,7 @@ from scipy.stats import norm
 np.set_printoptions(precision = 1)
 plt.rcParams.update({'font.size': 26})
 plt.rcParams['lines.linewidth'] = 4
+plt.rcParams['lines.markersize'] = 10
 plt.rcParams["figure.figsize"] = (12,9)
 
 np.random.seed(15051994)
@@ -22,7 +23,7 @@ def gaussDens(pt, mean = 0, variance = 1.):
 
 propWidth = 1.
 numPlots = 4
-numSamp = 250
+numSamp = 200
 samplesSmall = np.zeros(numSamp)
 currSamp = 0.5
 i = 0
@@ -47,8 +48,7 @@ while i < numSamp:
 
 
 propWidth = 1.
-numPlots = 4
-numSamp = 250
+numSamp = 200
 samplesBig = np.zeros(numSamp)
 currSamp = 12.0
 i = 0
@@ -73,15 +73,14 @@ while i < numSamp:
 
 
 plt.figure()
-plt.plot(samplesSmall, linewidth = 3, label ="Starting at $x_0 = 0.5$")
-plt.plot(samplesBig, linewidth = 3,  label ="Starting at $x_0 = 12.0$")
+plt.plot(samplesSmall, 'X', label ="Starting at $x_0 = 0.5$")
+plt.plot(samplesBig,  'X', label ="Starting at $x_0 = 12.0$")
 plt.grid()
 xl = plt.xlabel("Iteration")
 yl = plt.ylabel("Samples")
-plt.ylim((-5,15))
 plt.grid()
 plt.legend()
-plt.savefig("figures/burnIn", bbox_extra_artists= (xl, ), bbox_inches ="tight")
+plt.savefig("figures/burnInInitState", bbox_extra_artists= (xl, ), bbox_inches ="tight")
 plt.show()
 
 

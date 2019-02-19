@@ -8,14 +8,14 @@
 
 from __future__ import division	
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt 
+#plt.style.use('seaborn-colorblind')
 plt.style.use('ggplot')
 
 import sys
 sys.path.insert(0,'../modules/')
 
-from covFcts import maternCov
-from covMtrcs import buildCovMtrx
 from ptSetFcts import getPtsHalton
 from quadrForm import compQuadQMC
 
@@ -37,13 +37,13 @@ observation = parToObsOperator(trueInput) + obsNoise
 def evaluatePotential(pt, nOrmConst = 1., data = observation):
 	return np.exp(-1./(2.*noiseStdDev) * (data - parToObsOperator(pt))**2) / nOrmConst
 
-def gaussMixMdl(pt, mean = 2, variance = 0.5):
+def gaussMixMdlSym(pt, mean = 2, variance = 0.5):
 	leftModel =  np.exp(-(pt+mean)**2/(2*variance))/(np.sqrt(2*np.pi*variance))
 	rightModel =  np.exp(-(pt-mean)**2/(2*variance))/(np.sqrt(2*np.pi*variance))
 	return leftModel + rightModel
 
 def evaluatePotentialGaussianPrior(pt, nOrmConst = 1., data = observation):
-	return evaluatePotential(pt) * gaussDens(pt)
+	return evaluatePotential(pt) * gaussMixMdlSym(pt)
 
 
 numPtsQmc = 10000
@@ -53,15 +53,15 @@ normConst = compQuadQMC(evaluatePotentialGaussianPrior, ptSet)
 
 plotPts = np.linspace(-10,10,500)
 likelihood = evaluatePotential(plotPts, normConst)
-priorVals = gaussDens(plotPts)
+priorVals = gaussMixMdlSym(plotPts)
 posteriorVals = priorVals * likelihood
 
 
 def postDens(pt):
-	return evaluatePotential(pt, normConst) * gaussDens(pt)
+	return evaluatePotential(pt, normConst) * gaussMixMdlSym(pt)
 
 def postDensCM(pt):
-	return pt * evaluatePotential(pt, normConst) * gaussDens(pt)
+	return pt * evaluatePotential(pt, normConst) * gaussMixMdlSym(pt)
 
 condMean = compQuadQMC(postDensCM, ptSet)
 mapPts = np.linspace(-10,10,10000)
@@ -73,26 +73,24 @@ MAP = mapPts[np.argmax(mapVals)]
 
 
 plt.figure()
-plt.plot(plotPts, postVals, label = "Posterior density $\pi^y$")
+plt.xlabel("Location")
+plt.ylabel("Probability")
+plt.plot(plotPts, posteriorVals, label = "Posterior density $\pi^y$")
 plt.plot(plotPts,  priorVals, label = "Prior density $\pi_0$")
-plt.vlines(trueInput, 0, gaussDens(trueInput) * evaluatePotential(trueInput, normConst), linestyle = "dashed")
-plt.xlabel("")
-plt.ylabel("")
+plt.vlines(trueInput, 0, gaussMixMdlSym(trueInput) * evaluatePotential(trueInput, normConst), label = "True input value")
 plt.legend()
-plt.grid()
-plt.savefig("figures/discrMeanMap_priorPostDens.png")
+plt.savefig("figures/discrMeanMap_priorPostDens.png", bbox_inches ="tight")
 plt.show()
 
 
 plt.figure()
-plt.plot(plotPts, postVals, label = "Posterior density")
-plt.vlines(condMean, 0, gaussDens(condMean) * evaluatePotential(condMean, normConst), linestyle = "dashed")
-plt.vlines(MAP, 0, gaussDens(MAP) * evaluatePotential(MAP, normConst), linestyle = "dashed")
-plt.xlabel("")
-plt.ylabel("")
+plt.xlabel("Location")
+plt.ylabel("Probability")
+plt.plot(plotPts, posteriorVals, label = "Posterior density $\pi^y$")
+plt.vlines(condMean, 0, gaussMixMdlSym(condMean) * evaluatePotential(condMean, normConst), linestyle = "dashed", label = "Conditional mean")
+plt.vlines(MAP, 0, gaussMixMdlSym(MAP) * evaluatePotential(MAP, normConst),  linestyle = "dotted", label = "MAP")
 plt.legend()
-plt.grid()
-plt.savefig("figures/discrMeanMap_cmAndMap")
+plt.savefig("figures/discrMeanMap_cmAndMap", bbox_inches ="tight")
 plt.show()
 
 

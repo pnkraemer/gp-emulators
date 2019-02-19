@@ -92,7 +92,7 @@ plt.hist(samples, bins = 50, density = 1, label ="MCMC samples")
 plt.legend()
 plt.grid()
 plt.ylim((0,0.6))
-plt.savefig("figures/histMCMC")
+plt.savefig("figures/histMCMC", bbox_inches ="tight")
 plt.show()
 
 

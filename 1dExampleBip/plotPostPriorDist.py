@@ -1,21 +1,21 @@
-# NAME: 'postDist1D.py'
+# NAME: 'plotPostPriorDist.py'
 #
-# PURPOSE: Visualise 1d example of prior and posterior density
+# PURPOSE: Show simple plot of posterior and prior PDS
 #
-# DESCRIPTION:
+# DESCRIPTION: We derive the post. distribution
 #
 # AUTHOR: NK, kraemer(at)ins.uni-bonn.de
 
 from __future__ import division	
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.pyplot as plt 
+#plt.style.use('seaborn-colorblind')
 plt.style.use('ggplot')
 
 import sys
 sys.path.insert(0,'../modules/')
 
-from covFcts import maternCov
-from covMtrcs import buildCovMtrx
 from ptSetFcts import getPtsHalton
 from quadrForm import compQuadQMC
 
@@ -26,45 +26,45 @@ plt.rcParams['lines.linewidth'] = 4
 plt.rcParams["figure.figsize"] = (12,9)
 
 def parToObsOperator(pt):
-	return np.sin(pt)
+	return  np.sin(0.1*pt)
 
-trueInput = 0.1
-noiseStdDev = 0.5
+trueInput = 1.
+noiseStdDev = 0.01
 obsNoise = noiseStdDev * np.random.randn()
 observation = parToObsOperator(trueInput) + obsNoise
-print 'observation =', observation
+
 
 def evaluatePotential(pt, nOrmConst = 1., data = observation):
 	return np.exp(-1./(2.*noiseStdDev) * (data - parToObsOperator(pt))**2) / nOrmConst
 
+def gaussDens(pt, mean = 0.5, variance = 1.5):
+	return np.exp(-(pt-mean)**2/(2*variance))/(np.sqrt(2*np.pi*variance))
 
-# Compute normalising constant
-numPts = 1000
-ptSet = getPtsHalton(numPts, 1)
-normConst = .5  * compQuadQMC(evaluatePotential, ptSet)
-
-
-print 'normConst =', normConst
+def evaluatePotentialUnifPrior(pt, nOrmConst = 1., data = observation):
+	return evaluatePotential(pt) * 0.5
 
 
-plotPts = np.linspace(-1,1,100)
+numPtsQmc = 10000
+ptSet = 2 * getPtsHalton(numPtsQmc, 1) - 1
+normConst = compQuadQMC(evaluatePotentialUnifPrior, ptSet)
+
+
+plotPts = np.linspace(-7,9,500)
 likelihood = evaluatePotential(plotPts, normConst)
+priorVals = 0.5 * np.ones(len(plotPts))
+posteriorVals = priorVals * likelihood
 
-plt.plot(plotPts, 0.5 * likelihood, color = "darkblue", label = "Posterior density", linewidth = 4)
-plt.plot(plotPts, 0.5 * np.ones(len(plotPts)), color = "darkorange", label = "Prior density", linewidth = 4)
-plt.plot(trueInput, 0.5 * evaluatePotential(trueInput, normConst), "d", markersize = 10, color = "black", label = "True input")
-plt.vlines(trueInput, -0.1, 0.5 * evaluatePotential(trueInput, normConst), linestyle = "dashed", color = "black", linewidth = 2)
+plt.figure()
+plt.xlabel("Location")
+plt.ylabel("Probability")
+plt.ylim((-0.1,2.5))
+plt.plot(plotPts, posteriorVals, label = "Posterior density $\pi^y$")
+plt.plot(plotPts,  priorVals, label = "Prior density $\pi_0$")
+plt.vlines(trueInput, 0, 0.5 * evaluatePotential(trueInput, normConst), label = "True input value")
+plt.legend()
+plt.savefig("figures/plotPostPriorDist.png", bbox_inches ="tight")
 
-
-
-# plt.title("")
-plt.legend(shadow=True)
-plt.xlim((-1,1))
-plt.ylim((-0.1,2))
-plt.grid()
-plt.savefig("figures/postDist1d.png")
 plt.show()
-
 
 
 
