@@ -3,6 +3,7 @@
 # DESCRIPTION: set up a toy example for mcmc sampling and approximate with Metropolis sampler
 # AUTHOR: NK
 
+import matplotlib
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 import numpy as np 

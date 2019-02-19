@@ -4,13 +4,15 @@
 # AUTHOR: NK
 
 import matplotlib
-import numpy as np 
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
+
+import numpy as np 
 from scipy.stats import norm
 np.set_printoptions(precision = 1)
-#plt.rcParams.update({'font.size': 20})
-#plt.rcParams.update({'legend.fontsize': 20})
+plt.rcParams.update({'font.size': 26})
+plt.rcParams['lines.linewidth'] = 4
+plt.rcParams["figure.figsize"] = (12,9)
 
 np.random.seed(15051994)
 
@@ -71,12 +73,13 @@ while i < numSamp:
 
 
 plt.figure()
-plt.plot(samplesSmall, linewidth = 3, color = "darkblue", label ="Starting at x = 0.5", alpha = 0.9)
-plt.plot(samplesBig, linewidth = 3, color = "red", label ="Starting at x = 12.0", alpha = 0.9)
+plt.plot(samplesSmall, linewidth = 3, label ="Starting at $x_0 = 0.5$")
+plt.plot(samplesBig, linewidth = 3,  label ="Starting at $x_0 = 12.0$")
 plt.grid()
 xl = plt.xlabel("Iteration")
 yl = plt.ylabel("Samples")
 plt.ylim((-5,15))
+plt.grid()
 plt.legend()
 plt.savefig("figures/burnIn", bbox_extra_artists= (xl, ), bbox_inches ="tight")
 plt.show()

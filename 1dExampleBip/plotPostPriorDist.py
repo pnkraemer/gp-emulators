@@ -8,7 +8,8 @@
 
 from __future__ import division	
 import numpy as np
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
 
 import sys
 sys.path.insert(0,'../modules/')
@@ -20,8 +21,9 @@ from quadrForm import compQuadQMC
 
 np.random.seed(15051994)
 np.set_printoptions(precision = 1)
-plt.rcParams.update({'font.size': 20})
-plt.rcParams.update({'legend.fontsize': 20})
+plt.rcParams.update({'font.size': 26})
+plt.rcParams['lines.linewidth'] = 4
+plt.rcParams["figure.figsize"] = (12,9)
 
 def parToObsOperator(pt):
 	return np.sin(pt)
