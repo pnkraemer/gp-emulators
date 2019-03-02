@@ -49,23 +49,23 @@ class QuasiMonteCarlo(MonteCarlo):
         MonteCarlo.__init__(self, num_pts, dim)
 
 
-"""
-Some Testing
-TODO: make a testing class -- this 
-snippet here is run at every import which is really annoying!!
-"""
-def product(pt): 
-	return np.prod(pt)
+# """
+# Some Testing
+# TODO: make a testing class -- this 
+# snippet here is run at every import which is really annoying!!
+# """
+# def product(pt): 
+# 	return np.prod(pt)
 
-num_pts = 100000
-dim = 2
-mc_unitsquare = MonteCarlo(num_pts, dim)
+# num_pts = 100000
+# dim = 2
+# mc_unitsquare = MonteCarlo(num_pts, dim)
 
-mc_unitsquare.new_pointset()
+# mc_unitsquare.new_pointset()
 
 
-integral = mc_unitsquare.compute_integral_mc(product)
-print(integral)
+# integral = mc_unitsquare.compute_integral_mc(product)
+# print(integral)
 
 
 
