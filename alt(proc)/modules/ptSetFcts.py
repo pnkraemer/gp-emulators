@@ -9,7 +9,6 @@
 import numpy as np
 
 
-
 # The pointset is based on a randomly shifted lattice rule with product weight $\gamma_j = 1/j^2$,
 # based on the generating vector from Frances Kuo's website
 # http://web.maths.unsw.edu.au/(SIMSYMBOL)fkuo/ as ``lattice-39102-1024-1048576.3600''.
