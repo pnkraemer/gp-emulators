@@ -19,11 +19,7 @@ class PointSet:
         self.bbox = np.zeros((dim, 2))
         self.bbox[:,1] = np.ones(dim)
 
-    def set_bbox_unitsquare(self):
-        dim = self.dim
-        self.bbox = np.zeros((dim, 2))
-        self.bbox[:,1] = np.ones(dim)
-
+    # transforms the entire pointset (points and bbox)
     def affine_transform(self, new_bbox):
 
         def transform_pt(idx, new_bbox):
