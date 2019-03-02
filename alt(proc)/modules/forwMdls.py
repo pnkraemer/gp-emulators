@@ -14,7 +14,7 @@ import scipy.sparse
 # for \alpha(x,u) = \sum_{i=1}^K e^(a_i*x)
 # at coefficient a with mesh width h
 # and gives output measurements at pointset vec_J \subset [0,1]
-def compForwFEM(vecInput, vecMeas, meshwidth = 1.0/32.0):
+def compForwFem(inputVec, obsPtSet, meshwidth = 1.0/32.0):
 
 	def compIntExp(coeff, lowerBd, upperBd):
 		intSum = 0
@@ -30,11 +30,11 @@ def compForwFEM(vecInput, vecMeas, meshwidth = 1.0/32.0):
 	for idx in range(numIntNodes):
 		lowBd = idx/(numIntNodes + 1.0)
 		upBd = (idx + 2.0)/(numIntNodes + 1.0)
-		stiffMtrxDiag[idx] = (numIntNodes + 1.0)**2 *compIntExp(vecInput,lowBd,upBd)
+		stiffMtrxDiag[idx] = (numIntNodes + 1.0)**2 *compIntExp(inputVec,lowBd,upBd)
 	for idx in range(numIntNodes-1):
 		lowBd = (idx + 1.0)/(numIntNodes + 1.0)
 		upBd = (idx + 2.0)/(numIntNodes + 1.0)
-		stiffMtrxOffDiag[idx] = -(numIntNodes + 1.0)**2 * compIntExp(vecInput, lowBd, upBd)
+		stiffMtrxOffDiag[idx] = -(numIntNodes + 1.0)**2 * compIntExp(inputVec, lowBd, upBd)
 	stiffMtrx = scipy.sparse.diags([stiffMtrxDiag, stiffMtrxOffDiag, stiffMtrxOffDiag], [0,-1,1], format = 'csc')
 
 	rhs = np.ones(numIntNodes) / (numIntNodes + 1.0)

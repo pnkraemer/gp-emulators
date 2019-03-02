@@ -1,13 +1,12 @@
-# NAME: 'kernelMtrcs.py'
+# NAME: 'covMtrcs.py'
 #
-# PURPOSE: Collection of scripts to construct kernel matrices
+# PURPOSE: Collection of scripts to construct covariance matrices
 #
 # DESCRIPTION: see PURPOSE
 #
 # AUTHOR: NK, kraemer(at)ins.uni-bonn.de
 
 import numpy as np
-from miscFcts import sph00, sph10, sph11, sph12, sph20, sph21, sph22, sph23, sph24, sph30, sph31, sph32, sph33, sph34, sph35, sph36
 
 np.random.seed(15051994)
 np.set_printoptions(precision = 2)
