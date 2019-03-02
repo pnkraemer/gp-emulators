@@ -4,47 +4,44 @@ NAME: montecarlo.py
 PURPOSE: Monte Carlo integrators on rectangular domains
 
 """
+
 import numpy as np
 from pointsets import PointSet, Random, Lattice
+
+
 """
-Basic Monte Carlo class, base for 
-QMC and MCMC
+Base class for MC-like methods such as QMC and MCMC
+Essentially, the information is stored in the pointset
 """
 class MonteCarlo:
 
-    def __init__(self, num_pts,  dim):
-        self.num_pts = num_pts
-        self.dim = dim
-        self.ptset = None
+    def __init__(self, num_pts, dim):
+        self.pointset = PointSet(num_pts, dim)
 
+    def new_pointset(self, special_bbox = None):
+        num_pts = self.pointset.num_pts
+        dim = self.pointset.dim
 
-    def new_ptset(self, special_bbox = None):
-        num_pts = self.num_pts
-        dim = self.dim
-
-        ptset = Random(num_pts, dim)
+        pointset = Random(num_pts, dim)
         if special_bbox is not None:
-            ptset.bbox = special_bbox
-        ptset.construct_ptset()
-        self.ptset = ptset
+            pointset.bbox = special_bbox
+        pointset.construct_pointset()
+        self.pointset = pointset
 
     def compute_integral_mc(self, integrand):
-        if self.ptset is None:
-            print("No pointset, returning 0...")
-            return 0
-        num_pts = self.num_pts
-        ptset = self.ptset
+        num_pts = self.pointset.num_pts
+        points = self.pointset.points
 
         value = 0
         for i in range(num_pts):
-            sample = self.ptset.points[i]
+            sample = points[i]
             value = value + integrand(sample)
         return value / (1. * num_pts)
 
 
 
 """
-Monte Carlo Method with added pointset rules
+Quasi Monte Carlo as Monte Carlo with added pointset information
 """
 class QuasiMonteCarlo(MonteCarlo):
 
@@ -52,28 +49,10 @@ class QuasiMonteCarlo(MonteCarlo):
         MonteCarlo.__init__(self, num_pts, dim)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
 Some Testing
+TODO: make a testing class -- this 
+snippet here is run at every import which is really annoying!!
 """
 def product(pt): 
 	return np.prod(pt)
@@ -82,7 +61,8 @@ num_pts = 100000
 dim = 2
 mc_unitsquare = MonteCarlo(num_pts, dim)
 
-mc_unitsquare.new_ptset()
+mc_unitsquare.new_pointset()
+
 
 integral = mc_unitsquare.compute_integral_mc(product)
 print(integral)

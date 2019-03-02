@@ -19,7 +19,11 @@ class PointSet:
         self.bbox = np.zeros((dim, 2))
         self.bbox[:,1] = np.ones(dim)
 
-    # transforms the entire pointset (points and bbox)
+    def reset_bbox_unitsquare(self):
+        dim = self.dim
+        self.bbox = np.zeros((dim, 2))
+        self.bbox[:,1] = np.ones(dim)
+
     def affine_transform(self, new_bbox):
 
         def transform_pt(idx, new_bbox):
@@ -50,14 +54,14 @@ class Random(PointSet):
     def __init__(self, num_pts, dim):
         PointSet.__init__(self, num_pts, dim)
 
-    def construct_ptset(self):
+    def construct_pointset(self):
         num_pts = self.num_pts
         dim = self.dim
         bbox = self.bbox
 
         self.points = np.random.rand(num_pts, dim)
         new_bbox = self.bbox
-        self.set_bbox_unitsquare()
+        self.reset_bbox_unitsquare()
         self.affine_transform(new_bbox)
 
 
@@ -76,7 +80,7 @@ class Lattice(PointSet):
         gen_vec = np.loadtxt(path)
         Lattice.gen_vec = gen_vec[0:dim, 1]
 
-    def construct_ptset(self):
+    def construct_pointset(self):
         num_pts = self.num_pts
         dim = self.dim
         gen_vec = self.gen_vec
@@ -92,7 +96,7 @@ class Lattice(PointSet):
                 lattice[i, :] = (1.0*gen_vec * i / num_pts)% 1.0
         self.points = lattice
         new_bbox = self.bbox
-        self.set_bbox_unitsquare()
+        self.reset_bbox_unitsquare()
         self.affine_transform(new_bbox)
 
 
@@ -111,8 +115,8 @@ class Lattice(PointSet):
 # unit_random = Random(num_pts, dim, seed = 1)
 # unit_random2 = Random(num_pts, dim)
 # # unit_random.load_gen_vec('vectors/lattice-39102-1024-1048576.3600.txt')
-# unit_random.construct_ptset()
-# unit_random2.construct_ptset()
+# unit_random.construct_pointset()
+# unit_random2.construct_pointset()
 
 # plt.style.use("ggplot")
 # plt.plot(unit_random.points[:,0], unit_random.points[:,1], 'o')
