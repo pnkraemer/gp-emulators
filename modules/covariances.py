@@ -59,7 +59,7 @@ class ExpCov(Covariance):
 
 class MaternCov(Covariance):
 
-    def __init__(self, smoothness = 2.0, corr_length = 1.0):
+    def __init__(self, smoothness = 1.5, corr_length = 1.0):
 
         def matern_cov(pt1, pt2, smoothness = smoothness, corr_length = corr_length):
             norm_of_diff = np.linalg.norm(pt1 - pt2)

@@ -17,7 +17,7 @@ class GaussianProcess:
         self.mean_fct = mean_fct
         self.cov_fct = cov_fct
 
-    def draw(self, locations):
+    def sample(self, locations):
         mean_fct = self.mean_fct
         cov_fct = self.cov_fct
 
@@ -25,18 +25,18 @@ class GaussianProcess:
         cov_mtrx = cov_fct.assemble_cov_mtrx(locations, locations)
         return np.random.multivariate_normal(mean_vec, cov_mtrx)
 
-    # unfinished; where does the coefficient knowledge belong?
-    def condition(self, data):
-    	self.data = data
-    	locations = self.data.locations
-    	observations = self.data.observations
-    	variance = self.data.variance
+    # # unfinished; where does the coefficient knowledge belong?
+    # def condition(self, data):
+    #     self.data = data
+    # 	locations = self.data.locations
+    # 	observations = self.data.observations
+    # 	variance = self.data.variance
 
 
-    	mean_vec = mean_fct.assemble_mean_vec(locations)
-        cov_mtrx = cov_fct.assemble_cov_mtrx(locations, locations, variance)
+    # 	mean_vec = mean_fct.assemble_mean_vec(locations)
+    #     cov_mtrx = cov_fct.assemble_cov_mtrx(locations, locations, variance)
 
-        coeff = np.linalg.solve(cov_mtrx, observations - mean_vec)
+    #     coeff = np.linalg.solve(cov_mtrx, observations - mean_vec)
 
 
 from pointsets import PointSet, Random
@@ -46,19 +46,19 @@ from means import ZeroMean
 import matplotlib.pyplot as plt 
 
 zero_mean = ZeroMean()
-gauss_cov = MaternCov()
+cov_fct = ExpCov()
 
-gp_gauss = GaussianProcess(zero_mean, gauss_cov)
-num_pts = 200
+gp_gauss = GaussianProcess(zero_mean, cov_fct)
+num_pts = 500
 dim = 1
-num_plots = 5
+num_plots = 10
 
 random_pts = Random(num_pts, dim)
 random_pts.construct_pointset()
 plt.style.use("ggplot")
 for i in range(num_plots):
-    samples = gp_gauss.draw(random_pts)
-    plt.plot(random_pts.points, samples, 'o')
+    samples = gp_gauss.sample(random_pts)
+    plt.plot(random_pts.points, samples, 'o', markersize = 2)
 plt.show()
 
 

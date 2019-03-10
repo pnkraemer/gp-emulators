@@ -51,9 +51,6 @@ Random pointset
 """
 class Random(PointSet):
 
-    def __init__(self, num_pts, dim):
-        PointSet.__init__(self, num_pts, dim)
-
     def construct_pointset(self):
         num_pts = self.num_pts
         dim = self.dim
@@ -63,6 +60,10 @@ class Random(PointSet):
         new_bbox = self.bbox
         self.reset_bbox_unitsquare()
         self.affine_transform(new_bbox)
+
+    def __init__(self, num_pts, dim):
+        PointSet.__init__(self, num_pts, dim)
+        self.construct_pointset()
 
 
 """
