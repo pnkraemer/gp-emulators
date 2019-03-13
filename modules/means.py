@@ -16,11 +16,16 @@ class Mean:
     def assemble_mean_vec(self, pointset):
         mean_fct = self.mean_fct
         num_pts = pointset.num_pts
+        dim = pointset.dim
         points = pointset.points 
-
+ #       print("A =", points.shape)
+  #      print("A2 =", num_pts)
         mean_vec = np.zeros(num_pts)
         for i in range(num_pts):
-            mean_vec[i] = mean_fct(points[i])
+   #         print("B =", points[i].shape)
+    #        print("B2 =", points[i].reshape([1, dim]).shape, i)
+  #          print(points[i].reshape([1, dim]))
+            mean_vec[i] = mean_fct(points[i].reshape([1, dim]))
         return mean_vec
 
 

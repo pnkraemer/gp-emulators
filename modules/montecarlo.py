@@ -16,7 +16,7 @@ Essentially, the information is stored in the pointset
 class MonteCarlo:
 
     def __init__(self, num_pts, dim):
-        self.pointset = PointSet(num_pts, dim)
+        self.pointset = Random(num_pts, dim)
 
     def new_pointset(self, special_bbox = None):
         num_pts = self.pointset.num_pts
@@ -28,7 +28,7 @@ class MonteCarlo:
         pointset.construct_pointset()
         self.pointset = pointset
 
-    def compute_integral_mc(self, integrand):
+    def compute_integral(self, integrand):
         num_pts = self.pointset.num_pts
         points = self.pointset.points
 

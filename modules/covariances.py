@@ -21,16 +21,25 @@ class Covariance:
         cov_fct = self.cov_fct
         num_pts_1 = pointset1.num_pts
         num_pts_2 = pointset2.num_pts
+        dim1 = pointset1.dim
+        dim2 = pointset2.dim
         points1 = pointset1.points 
         points2 = pointset2.points 
 
         cov_mtrx = np.zeros((num_pts_1, num_pts_2))
         for i in range(num_pts_1):
             for j in range(num_pts_2):
-                cov_mtrx[i, j] = cov_fct(points1[i], points2[j])
+                cov_mtrx[i, j] = cov_fct(points1[i].reshape([1, dim1]), points2[j,:].reshape([1, dim2]))
                 if i==j:
                     cov_mtrx[i,j] = cov_mtrx[i,j] + shift
         return cov_mtrx
+
+    def assemble_entry_cov_mtrx(self, point1, point2, shift = 0.):
+        cov_fct = self.cov_fct
+        entry = cov_fct(point1, point2)
+        if np.linalg.norm(point1 - point2) <= 0:
+            entry = entry + shift
+        return entry
 
 
 class GaussCov(Covariance):

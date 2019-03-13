@@ -2,6 +2,8 @@
 NAME: pointsets.py
 
 PURPOSE: knowledge about pointset generation
+
+TODO: make an "augment" function?!
 """
 
 import numpy as np
@@ -46,6 +48,15 @@ class PointSet:
         self.points = points
         self.bbox = new_bbox
 
+    def make_pointset(point):
+ #       print(point)
+        num_pts = point.shape[0]
+        dim = point.shape[1]
+        pointset = PointSet(num_pts, dim)
+        pointset.points = point
+        return pointset
+
+
 """
 Random pointset
 """
@@ -63,6 +74,25 @@ class Random(PointSet):
 
     def __init__(self, num_pts, dim):
         PointSet.__init__(self, num_pts, dim)
+        self.construct_pointset()
+
+"""
+Mesh in 1d
+"""
+class Mesh1d(PointSet):
+
+    def construct_pointset(self):
+        num_pts = self.num_pts
+        dim = self.dim
+        bbox = self.bbox
+        self.points = np.zeros((num_pts, 1))
+        self.points[:,0] = np.linspace(0,1,num_pts)
+        new_bbox = self.bbox
+        self.reset_bbox_unitsquare()
+        self.affine_transform(new_bbox)
+
+    def __init__(self, num_pts):
+        PointSet.__init__(self, num_pts, 1)
         self.construct_pointset()
 
 

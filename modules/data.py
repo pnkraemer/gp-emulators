@@ -7,7 +7,7 @@ NOTE: We only consider additive Gaussian noise
 """
 
 import numpy as np
-from pointsets import Random
+from pointsets import Random, Mesh1d
 
 class Data():
 
@@ -26,7 +26,7 @@ class Data():
 
         self.locations = locations
         self.true_observations = true_observations
-        self.noisy_observations = make_noisy(true_observations)
+        self.observations = make_noisy(true_observations)
         self.variance = variance
 
 
@@ -64,7 +64,30 @@ class ToyInverseProblem(InverseProblem):
                 observations[i, 0] = sine(points[i, 0])
             return observations
 
-        pointset = Random(5, 1)
+        pointset = Random(1, 1)
+        InverseProblem.__init__(self, pointset, forward_map, variance)
+
+
+class ToyGPData(InverseProblem):
+
+    def __init__(self, num_pts = 3, variance = 0.):
+        
+        def forward_map(locations):
+
+            def exp_sine(pt):
+                return np.exp(-np.sin(10*pt)**2)
+
+            points = locations.points
+            num_pts = locations.num_pts
+            dim = locations.dim
+            assert(dim==1), "Forward map is 1D, pointset is not"
+
+            observations = np.zeros((num_pts, 1))
+            for i in range(num_pts):
+                observations[i, 0] = exp_sine(points[i, 0])
+            return observations
+
+        pointset = Mesh1d(num_pts)
         InverseProblem.__init__(self, pointset, forward_map, variance)
 
 
