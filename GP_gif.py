@@ -1,6 +1,7 @@
 
 import numpy as np
 
+sys.path.insert(0, "./modules")
 from pointsets import PointSet, Random, Mesh1d
 from covariances import GaussCov, ExpCov, MaternCov
 from means import ZeroMean
