@@ -11,7 +11,6 @@ from pointsets import Random, Mesh1d
 
 class Data():
 
-    # Assume additive Gaussian observation error -> std_dev
     def __init__(self, locations, true_observations, variance = 0.):
 
         def make_noisy(true_observations):
@@ -41,8 +40,6 @@ class InverseProblem(Data):
 
 """
 Toy 1d ill-posed inverse problem with G(x) = sin(5x) on [0,1]
-
-TODO: evaluate forward map function
 """
 class ToyInverseProblem(InverseProblem):
 
@@ -68,6 +65,9 @@ class ToyInverseProblem(InverseProblem):
         InverseProblem.__init__(self, pointset, forward_map, variance)
 
 
+"""
+Toy 1d Gaussian process data
+"""
 class ToyGPData(InverseProblem):
 
     def __init__(self, num_pts = 3, variance = 0.):
@@ -75,7 +75,7 @@ class ToyGPData(InverseProblem):
         def forward_map(locations):
 
             def exp_sine(pt):
-                return np.exp(-np.sin(10*pt)**2)
+                return np.exp(-3*np.sin(3*pt**2))
 
             points = locations.points
             num_pts = locations.num_pts
@@ -88,24 +88,6 @@ class ToyGPData(InverseProblem):
             return observations
 
         pointset = Mesh1d(num_pts)
+        pointset.points = pointset.points*1./2. + 0.25
         InverseProblem.__init__(self, pointset, forward_map, variance)
-
-
-
-
-
-# IP = ToyInverseProblem(0.0001)
-# print(IP.locations.points)
-# print(IP.true_observations)
-# print(IP.noisy_observations)
-# print(IP.variance)
-
-
-# print()
-# B = Random(20,1)
-# print(IP.forward_map(B))
-
-
-
-
 
