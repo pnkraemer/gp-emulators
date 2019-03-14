@@ -21,18 +21,18 @@ np.random.seed(1)
 
 
 # Set up problem and Gaussian process approximation
-num_obs = 6
+num_obs = 3
 noise = 0.
 data = ToyGPData(num_obs, noise)
 zero_mean = ZeroMean()
-cov_fct = MaternCov(6.5)
+cov_fct = MaternCov(3.)
 gp = GaussianProcess(zero_mean, cov_fct)
 cgp = ConditionedGaussianProcess(gp, data)
 
 
 
 num_pts = 200
-gpv = GPVisual(gp)
+gpv = GPVisual(cgp)
 gpv.addanimation_samples()
 #gpv.addplot_mean()
 gpv.addplot_deviation()

@@ -82,6 +82,7 @@ class GPVisual():
             samp = self.gp.sample(self.mesh)
             line.set_data(self.mesh.points, samp)
             line.set_linewidth(3)
+            line.set_color(0.4*np.random.rand(3,))
             return line,
 
         line, = self.ax.plot([], [])
