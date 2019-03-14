@@ -88,6 +88,6 @@ class ToyGPData(InverseProblem):
             return observations
 
         pointset = Mesh1d(num_pts)
-        pointset.points = pointset.points*1./2. + 0.25
+        pointset.points = pointset.points*0.6 + 0.01
         InverseProblem.__init__(self, pointset, forward_map, variance)
 
