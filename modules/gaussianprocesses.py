@@ -37,6 +37,10 @@ class GaussianProcess:
         return np.random.multivariate_normal(mean_vec.reshape([len(mean_vec),]), cov_mtrx)
 
 
+
+
+
+
 """
 Conditioned Gaussian process class
 ->Result of GP regression

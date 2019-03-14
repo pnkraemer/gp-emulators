@@ -21,8 +21,8 @@ np.random.seed(1)
 
 
 # Set up problem and Gaussian process approximation
-num_obs = 3
-noise = 0.
+num_obs = 5
+noise = 1e-2
 data = ToyGPData(num_obs, noise)
 zero_mean = ZeroMean()
 cov_fct = MaternCov(3.)
@@ -32,18 +32,16 @@ cgp = ConditionedGaussianProcess(gp, data)
 
 
 num_pts = 200
-gpv = GPVisual(cgp)
+gpv = GPVisual(cgp, ctheme = "firebrick")
 gpv.addanimation_samples()
-#gpv.addplot_mean()
+gpv.addplot_mean()
 gpv.addplot_deviation()
 gpv.addplot_observations()
-#gpv.addplot_errorbar()
 plt.legend()
-
+gpv.anim.save("./figures/animations/gp_posterior.mp4", fps = 3, dpi = 250, writer="ffmpeg")#, fps=30, extra_args=['-vcodec', 'libx264'])
 plt.show()
 
-#animation_gp(gp, '../animations/animation_prior.mp4', num_pts)
-#animation_gp(cGP, '../animations/animation_posterior.mp4', num_pts)
+
 
 
 
