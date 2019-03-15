@@ -64,11 +64,16 @@ class GPVisual():
             locations = self.gp.data.locations.points
             observations = self.gp.data.observations
             self.ax.plot(locations, observations, 'o', color = "white")
-            self.ax.errorbar(locations, observations, 
+            if self.gp.data.variance == 0:
+                self.ax.plot(locations, observations, 'o', color = self.color,
+                             markerfacecolor = "white", markeredgecolor = self.color, 
+                             markeredgewidth = 2, label = "Observations")
+            else:
+                self.ax.errorbar(locations, observations, 
                              yerr = np.sqrt(self.gp.data.variance), color = self.color, 
                              fmt='o', markerfacecolor = "white", 
                              markeredgecolor = self.color, markeredgewidth = 2, 
-                             label = "Observations")
+                             capsize = 3, label = "Observations")
 
 
     def addanimation_samples(self):
@@ -81,7 +86,7 @@ class GPVisual():
             samp = self.gp.sample(self.mesh)
             line.set_data(self.mesh.points, samp)
             line.set_linewidth(3)
-            line.set_color(0.25*np.random.rand(3,))
+            line.set_color(0.3*np.random.rand(3,))
             return line,
 
         line, = self.ax.plot([], [])
