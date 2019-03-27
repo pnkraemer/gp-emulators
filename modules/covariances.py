@@ -26,6 +26,9 @@ class Covariance:
             cov_mtrx = cov_mtrx + shift * np.identity(len(points1))
         return cov_mtrx
 
+    def evaluate(self, pt1, pt2):
+        return self.cov_fct(pt1, pt2)
+
 
 class GaussCov(Covariance):
 

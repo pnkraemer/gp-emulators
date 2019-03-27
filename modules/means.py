@@ -20,6 +20,9 @@ class Mean:
         mean_vec = mean_fct(points)
         return mean_vec
 
+    def evaluate(self, points):
+        return self.mean_fct(points)
+
 
 """
 Class for mean function

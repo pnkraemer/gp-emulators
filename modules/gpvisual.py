@@ -18,14 +18,14 @@ class GPVisual():
                  xlim = [0,1], title = "", naked = False):
         plt.style.use("ggplot")
         plt.rcParams["figure.figsize"] = [10,5]
-        plt.rcParams["lines.linewidth"] = 3
+        plt.rcParams["lines.linewidth"] = 1
         plt.rcParams["lines.markersize"] = 8
         plt.rcParams["grid.linewidth"] = 1
         plt.rcParams["font.size"] = 16
         plt.rcParams['xtick.major.width']= 0
         plt.rcParams['ytick.major.width']= 0
         if naked == True:
-            plt.rcParams["axes.facecolor"] = "white"
+            plt.rcParams["axes.facecolor"] = "darkgray"
         fig = plt.figure()
         ax = plt.axes()
         plt.title(title, color = "black", alpha = 0.6)
@@ -55,7 +55,7 @@ class GPVisual():
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):
             samp = self.gp.sample(self.mesh)
-            self.ax.plot(self.mesh.points, samp, '--')
+            self.ax.plot(self.mesh.points, samp, '-')#, color = np.random.rand(3,))
 
     def addplot_observations(self):
         if self.gp.data is None:
@@ -66,13 +66,13 @@ class GPVisual():
             self.ax.plot(locations, observations, 'o', color = "white")
             if self.gp.data.variance == 0:
                 self.ax.plot(locations, observations, 'o', color = self.color,
-                             markerfacecolor = "white", markeredgecolor = self.color, 
-                             markeredgewidth = 2, label = "Observations")
+                             markerfacecolor = "lightgray", markeredgecolor = self.color, 
+                             markeredgewidth = 1, label = "Observations")
             else:
                 self.ax.errorbar(locations, observations, 
                              yerr = np.sqrt(self.gp.data.variance), color = self.color, 
                              fmt='o', markerfacecolor = "white", 
-                             markeredgecolor = self.color, markeredgewidth = 2, 
+                             markeredgecolor = self.color, markeredgewidth = 1, 
                              capsize = 3, label = "Observations")
 
 
@@ -96,8 +96,8 @@ class GPVisual():
 
 
 class NakedGPVisual(GPVisual):
-    def __init__(self, GaussProc, num_pts = 200, xlim = [0,1], title = ""):
-        GPVisual.__init__(self, GaussProc, num_pts = 200, xlim = [0,1], 
+    def __init__(self, GaussProc, ctheme = "darkred", num_pts = 200, xlim = [0,1], title = ""):
+        GPVisual.__init__(self, GaussProc, ctheme = ctheme, num_pts = 200, xlim = [0,1], 
                           title = "", naked = True)
         plt.grid(False)
         plt.gca().spines['right'].set_visible(False)

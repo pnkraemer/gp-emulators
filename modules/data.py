@@ -77,6 +77,9 @@ class ToyGPData(InverseProblem):
             def exp_sine(pt):
                 return np.exp(-3*np.sin(3*pt**2))
 
+            def forw2(pt):
+                return -20*(pt-0.5)**2
+
             points = locations.points
             num_pts = locations.num_pts
             dim = locations.dim
@@ -84,7 +87,7 @@ class ToyGPData(InverseProblem):
 
             observations = np.zeros((num_pts, 1))
             for i in range(num_pts):
-                observations[i, 0] = exp_sine(points[i, 0])
+                observations[i, 0] = forw2(points[i, 0])
             return observations
 
         pointset = Mesh1d(num_pts)
