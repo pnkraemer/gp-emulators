@@ -56,6 +56,11 @@ class PointSet:
         pointset.points = point
         return pointset
 
+    def augment(self, point):
+        pts = np.vstack((self.points, point))
+        self.points = np.copy(pts)
+        self.num_pts = self.num_pts + 1
+
 
 """
 Random pointset

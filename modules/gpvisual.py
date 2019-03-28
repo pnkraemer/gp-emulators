@@ -14,7 +14,7 @@ from gaussianprocesses import GaussianProcess#, ConditionedGaussianProcess
 
 class GPVisual():
 
-    def __init__(self, GaussProc, ctheme = "darkred", num_pts = 200, 
+    def __init__(self, GaussProc, ctheme = "darkslategray", num_pts = 200, 
                  xlim = [0,1], title = "", naked = False):
         plt.style.use("ggplot")
         plt.rcParams["figure.figsize"] = [10,5]
@@ -25,14 +25,14 @@ class GPVisual():
         plt.rcParams['xtick.major.width']= 0
         plt.rcParams['ytick.major.width']= 0
         if naked == True:
-            plt.rcParams["axes.facecolor"] = "darkgray"
-        fig = plt.figure()
-        ax = plt.axes()
+            plt.rcParams["axes.facecolor"] = "white"
+        figure = plt.figure()
+        axis = plt.axes()
         plt.title(title, color = "black", alpha = 0.6)
         plt.xlim(xlim)
         plt.grid(True)
-        self.fig = fig
-        self.ax = ax
+        self.fig = figure
+        self.ax = axis
         self.gp = GaussProc
         self.num_pts = num_pts
         self.mesh = Mesh1d(self.num_pts)
@@ -55,7 +55,7 @@ class GPVisual():
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):
             samp = self.gp.sample(self.mesh)
-            self.ax.plot(self.mesh.points, samp, '-')#, color = np.random.rand(3,))
+            self.ax.plot(self.mesh.points, samp, '-', color = 0.4*np.random.rand(3,))
 
     def addplot_observations(self):
         if self.gp.data is None:
@@ -66,7 +66,7 @@ class GPVisual():
             self.ax.plot(locations, observations, 'o', color = "white")
             if self.gp.data.variance == 0:
                 self.ax.plot(locations, observations, 'o', color = self.color,
-                             markerfacecolor = "lightgray", markeredgecolor = self.color, 
+                             markerfacecolor = "white", markeredgecolor = self.color, 
                              markeredgewidth = 1, label = "Observations")
             else:
                 self.ax.errorbar(locations, observations, 
@@ -85,8 +85,8 @@ class GPVisual():
         def animate(i):
             samp = self.gp.sample(self.mesh)
             line.set_data(self.mesh.points, samp)
-            line.set_linewidth(3)
-            line.set_color(0.3*np.random.rand(3,))
+            line.set_linewidth(1)
+            line.set_color(0.4*np.random.rand(3,))
             return line,
 
         line, = self.ax.plot([], [])
@@ -96,7 +96,7 @@ class GPVisual():
 
 
 class NakedGPVisual(GPVisual):
-    def __init__(self, GaussProc, ctheme = "darkred", num_pts = 200, xlim = [0,1], title = ""):
+    def __init__(self, GaussProc, ctheme = "darkslategray", num_pts = 200, xlim = [0,1], title = ""):
         GPVisual.__init__(self, GaussProc, ctheme = ctheme, num_pts = 200, xlim = [0,1], 
                           title = "", naked = True)
         plt.grid(False)

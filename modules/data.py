@@ -44,7 +44,7 @@ Toy 1d ill-posed inverse problem with G(x) = sin(5x) on [0,1]
 class ToyInverseProblem(InverseProblem):
 
 
-    def __init__(self, variance = 0.):
+    def __init__(self, num_pts = 1, variance = 0.):
         
         def forward_map(locations):
 
@@ -61,7 +61,7 @@ class ToyInverseProblem(InverseProblem):
                 observations[i, 0] = sine(points[i, 0])
             return observations
 
-        pointset = Random(1, 1)
+        pointset = Random(num_pts, 1)
         InverseProblem.__init__(self, pointset, forward_map, variance)
 
 
@@ -87,7 +87,7 @@ class ToyGPData(InverseProblem):
 
             observations = np.zeros((num_pts, 1))
             for i in range(num_pts):
-                observations[i, 0] = forw2(points[i, 0])
+                observations[i, 0] = exp_sine(points[i, 0])
             return observations
 
         pointset = Mesh1d(num_pts)

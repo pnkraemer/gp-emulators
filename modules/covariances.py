@@ -27,6 +27,7 @@ class Covariance:
         return cov_mtrx
 
     def evaluate(self, pt1, pt2):
+        #print("Pt1 =", pt1, "Pt2 =", pt2)
         return self.cov_fct(pt1, pt2)
 
 
