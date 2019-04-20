@@ -3,6 +3,8 @@ NAME: montecarlo.py
 
 PURPOSE: Monte Carlo integrators on rectangular domains
 
+outdated. Replace with "quadrature" class
+
 """
 
 import numpy as np

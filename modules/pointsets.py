@@ -2,8 +2,6 @@
 NAME: pointsets.py
 
 PURPOSE: knowledge about pointset generation
-
-TODO: make an "augment" function?!
 """
 
 import numpy as np
@@ -15,90 +13,35 @@ Base class for pointsets
 class PointSet:
 
     def __init__(self, num_pts, dim):
-        self.num_pts = num_pts
-        self.dim = dim
         self.points = np.zeros((num_pts, dim))
-        self.bbox = np.zeros((dim, 2))
-        self.bbox[:,1] = np.ones(dim)
-
-    def reset_bbox_unitsquare(self):
-        dim = self.dim
-        self.bbox = np.zeros((dim, 2))
-        self.bbox[:,1] = np.ones(dim)
-
-    def affine_transform(self, new_bbox):
-
-        def transform_pt(idx, new_bbox):
-            
-            pt = self.points[idx]
-            dim = self.dim
-            bbox = self.bbox
-
-            for i in range(dim):
-                scale = (new_bbox[i,1] - new_bbox[i,0])/(bbox[i,1] - bbox[i,0])
-                shift = new_bbox[i,0] - bbox[i,0]
-                pt[i] = shift + scale * pt[i]
-            return pt
-
-        points = self.points
-        num_pts = self.num_pts
-        dim = self.dim
-        for i in range(num_pts):
-        	points[i,:] = transform_pt(i, new_bbox)
-        self.points = points
-        self.bbox = new_bbox
-
-    def make_pointset(point):
- #       print(point)
-        num_pts = point.shape[0]
-        dim = point.shape[1]
-        pointset = PointSet(num_pts, dim)
-        pointset.points = point
-        return pointset
 
     def augment(self, point):
-        pts = np.vstack((self.points, point))
-        self.points = np.copy(pts)
-        self.num_pts = self.num_pts + 1
-
+        self.points = np.vstack((self.points, point))
 
 """
 Random pointset
 """
 class Random(PointSet):
 
-    def construct_pointset(self):
-        num_pts = self.num_pts
-        dim = self.dim
-        bbox = self.bbox
-
+    def construct_pointset_random(self, num_pts, dim):
         self.points = np.random.rand(num_pts, dim)
-        new_bbox = self.bbox
-        self.reset_bbox_unitsquare()
-        self.affine_transform(new_bbox)
 
     def __init__(self, num_pts, dim):
         PointSet.__init__(self, num_pts, dim)
-        self.construct_pointset()
+        self.construct_pointset_random(num_pts, dim)
 
 """
 Mesh in 1d
 """
 class Mesh1d(PointSet):
 
-    def construct_pointset(self):
-        num_pts = self.num_pts
-        dim = self.dim
-        bbox = self.bbox
+    def construct_pointset_mesh1d(self, num_pts):
         self.points = np.zeros((num_pts, 1))
         self.points[:,0] = np.linspace(0,1,num_pts)
-        new_bbox = self.bbox
-        self.reset_bbox_unitsquare()
-        self.affine_transform(new_bbox)
 
     def __init__(self, num_pts):
         PointSet.__init__(self, num_pts, 1)
-        self.construct_pointset()
+        self.construct_pointset_mesh1d(num_pts)
 
 
 """
@@ -106,23 +49,18 @@ Lattice rules, see Frances Kuo's website for generating vectors
 """
 class Lattice(PointSet):
 
-    def __init__(self, num_pts, dim, rand_shift = False):
-        PointSet.__init__(self, num_pts, dim)
-        self.rand_shift = rand_shift
-
     # path is a string to the .txt file
-    def load_gen_vec(self, path):
-        dim = self.dim
-        gen_vec = np.loadtxt(path)
-        Lattice.gen_vec = gen_vec[0:dim, 1]
+    def construct_pointset_lattice(self, path, rand_shift):
 
-    def construct_pointset(self):
-        num_pts = self.num_pts
-        dim = self.dim
-        gen_vec = self.gen_vec
-        rand_shift = self.rand_shift
+        def load_gen_vec(path, dim):
+            gen_vec = np.loadtxt(path)
+            return gen_vec[0:dim, 1]
 
+        dim = len(self.points.T)
+        num_pts = len(self.points)
+        gen_vec = load_gen_vec(path, dim)
         lattice = np.zeros((num_pts, dim))
+
         if rand_shift == True:
             shift = np.random.rand(dim)
             for i in range(num_pts):
@@ -131,30 +69,38 @@ class Lattice(PointSet):
             for i in range(num_pts):
                 lattice[i, :] = (1.0*gen_vec * i / num_pts)% 1.0
         self.points = lattice
-        new_bbox = self.bbox
-        self.reset_bbox_unitsquare()
-        self.affine_transform(new_bbox)
+
+    def __init__(self, num_pts, dim, path = '/Users/nicholaskramer/Documents/GitHub/gp-emulators/modules/vectors/lattice-39102-1024-1048576.3600.txt', rand_shift = False):
+        PointSet.__init__(self, num_pts, dim)
+        self.construct_pointset_lattice(path, rand_shift)
 
 
 
 
 
 
-# """
-# Some testing
-# """
+
+# # """
+# # Some testing
+# # """
 # import matplotlib.pyplot as plt 
 
 # np.random.seed(1)
-# num_pts = 100
+# num_pts = 1000
 # dim = 2
-# unit_random = Random(num_pts, dim, seed = 1)
-# unit_random2 = Random(num_pts, dim)
-# # unit_random.load_gen_vec('vectors/lattice-39102-1024-1048576.3600.txt')
-# unit_random.construct_pointset()
-# unit_random2.construct_pointset()
+# ptset = Lattice(num_pts, dim, rand_shift = False)
+# print(ptset.points)
+# ptset2 = Lattice(num_pts, dim, rand_shift = True, seed = 1)
+# ptset3 = Lattice(num_pts, dim, rand_shift = True, seed = 2)
+# # unit_random2 = Random(num_pts, dim)
+# # # unit_random.load_gen_vec('vectors/lattice-39102-1024-1048576.3600.txt')
+# # unit_random.construct_pointset()
+# # unit_random2.construct_pointset()
 
 # plt.style.use("ggplot")
-# plt.plot(unit_random.points[:,0], unit_random.points[:,1], 'o')
-# plt.plot(unit_random2.points[:,0], unit_random2.points[:,1], 'o')
+# plt.plot(ptset.points[:,0], ptset.points[:,1], 'o', label = "No shift")
+# plt.plot(ptset2.points[:,0], ptset2.points[:,1], 'o', label = "Shift, seed = 1")
+# plt.plot(ptset3.points[:,0], ptset3.points[:,1], 'o', label = "Shift, seed = 2")
+# # plt.plot(unit_random2.points[:,0], unit_random2.points[:,1], 'o')
+# plt.legend()
 # plt.show()

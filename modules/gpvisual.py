@@ -35,33 +35,33 @@ class GPVisual():
         self.ax = axis
         self.gp = GaussProc
         self.num_pts = num_pts
-        self.mesh = Mesh1d(self.num_pts)
-        self.mean_vec = self.gp.mean_fct.assemble_mean_vec(self.mesh.points)
+        self.mesh = Mesh1d(self.num_pts).points
+        self.mean_vec = self.gp.mean_fct.assemble_mean_vec(self.mesh)
         self.color = ctheme
 
     def addplot_mean(self):
-        self.ax.plot(self.mesh.points, self.mean_vec, color = self.color, 
+        self.ax.plot(self.mesh, self.mean_vec, color = self.color, 
                      label = "Mean function")
 
 
     def addplot_deviation(self, num_dev = 2):
-        cov_mtrx = self.gp.cov_fct.assemble_cov_mtrx(self.mesh.points, self.mesh.points)
+        cov_mtrx = self.gp.cov_fct.assemble_cov_mtrx(self.mesh, self.mesh)
         pos_dev = self.mean_vec.T + 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
         neg_dev = self.mean_vec.T - 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
-        self.ax.fill_between(self.mesh.points[:,0], neg_dev[0,:], pos_dev[0,:], 
+        self.ax.fill_between(self.mesh[:,0], neg_dev[0,:], pos_dev[0,:], 
                              facecolor = self.color, linewidth = 1, linestyle = "-", 
                              alpha = 0.3, label = "Confidence interval")
 
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):
             samp = self.gp.sample(self.mesh)
-            self.ax.plot(self.mesh.points, samp, '-', color = 0.4*np.random.rand(3,))
+            self.ax.plot(self.mesh, samp, '-', color = 0.4*np.random.rand(3,))
 
     def addplot_observations(self):
         if self.gp.data is None:
             print("This GP does not have data, hence no observations")
         else:
-            locations = self.gp.data.locations.points
+            locations = self.gp.data.locations
             observations = self.gp.data.observations
             self.ax.plot(locations, observations, 'o', color = "white")
             if self.gp.data.variance == 0:
@@ -84,7 +84,7 @@ class GPVisual():
 
         def animate(i):
             samp = self.gp.sample(self.mesh)
-            line.set_data(self.mesh.points, samp)
+            line.set_data(self.mesh, samp)
             line.set_linewidth(1)
             line.set_color(0.4*np.random.rand(3,))
             return line,

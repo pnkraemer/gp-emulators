@@ -34,21 +34,16 @@ cgp2 = ConditionedGaussianProcess(gp, data2)
 
 
 num_pts = 250
-gpv = GPVisual(cgp)
-# gpv.addanimation_samples()
-#gpv.addplot_samples(2)
+gpv = NakedGPVisual(cgp)
+gpv.addanimation_samples()
+gpv.addplot_samples(2)
 gpv.addplot_mean()
 gpv.addplot_deviation()
 gpv.addplot_observations()
 #gpv.anim.save("./figures/animations/gp_posterior_green.mp4", fps = 3, dpi = 250, writer="ffmpeg")#, fps=30, extra_args=['-vcodec', 'libx264'])
-#gpv2 = NakedGPVisual(cgp2, fig, ax, ctheme = "darkslategray", num_pts = num_pts)
-#gpv2.addplot_mean()
-#gpv2.addplot_deviation()
-#gpv2.addplot_observations()
-#plt.legend()
-#plt.style.use("ggplot")
+plt.legend()
 plt.show()
-gpv.fig.savefig("./figures/gpani2.png", dpi = 350)
+#gpv.fig.savefig("./figures/gpani2.png", dpi = 350)
 
 
 
