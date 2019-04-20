@@ -1,7 +1,7 @@
 """
 NAME: data.py
 
-PURPOSE: data class, noisy observations on locations
+AUTHOR: data class, noisy observations on locations
 
 NOTE: We only consider additive Gaussian noise
 """
@@ -17,13 +17,14 @@ class Data():
     def __init__(self, locations, true_observations, variance = 0.001):
 
         def make_noisy(true_observations):
-            dim_obs = len(true_observations.T)
-            num_obs = len(true_observations)
 
             noisy_observations = np.copy(true_observations)
-            for i in range(num_obs):
-                noise = np.sqrt(variance) * np.random.randn(1, dim_obs)
-                noisy_observations[i,:] = noisy_observations[i,:] + noise
+            if variance > 0:
+                dim_obs = len(true_observations.T)
+                num_obs = len(true_observations)
+                for i in range(num_obs):
+                    noise = np.sqrt(variance) * np.random.randn(1, dim_obs)
+                    noisy_observations[i,:] = noisy_observations[i,:] + noise
             return noisy_observations
 
         self.locations = locations
@@ -31,9 +32,8 @@ class Data():
         self.observations = make_noisy(true_observations)
         self.variance = variance
 
-
 """
-TODO: How does it work for multidimensional data---forward map should have multidimensional output
+An inverse problem is data together with a forward map
 """
 class InverseProblem(Data):
 
@@ -42,11 +42,10 @@ class InverseProblem(Data):
         self.forward_map = forward_map
         Data.__init__(self, locations, true_observations, variance)
 
-
 """
-Toy 1d ill-posed inverse problem with G(x) = sin(5x) on [0,1]
+Toy 1d inverse problem with G(x) = sin(5x) on [0,1]
 """
-class ToyInverseProblem(InverseProblem):
+class ToyInverseProblem1d(InverseProblem):
 
     """
     unpredictable behaviour for num_pts>1 because output dimension of forward map does not aligh
@@ -67,14 +66,14 @@ class ToyInverseProblem(InverseProblem):
                 observations[i, 0] = sine(points[i, 0])
             return observations * np.ones(num_pts)
 
-        pointset = Random(num_pts, 1)
-        InverseProblem.__init__(self, pointset.points, forward_map, variance)
+        pointset = Random.construct(num_pts, 1)
+        InverseProblem.__init__(self, pointset, forward_map, variance)
 
 
 """
 Toy 1d Gaussian process data
 """
-class ToyGPData(InverseProblem):
+class ToyGPData1d(InverseProblem):
 
     def __init__(self, num_pts = 3, variance = 0.):
         
@@ -95,20 +94,19 @@ class ToyGPData(InverseProblem):
                 observations[i, 0] = exp_sine(points[i, 0])
             return observations
 
-        pointset = Mesh1d(num_pts)
-        pointset.points = pointset.points*0.6 + 0.01
-        InverseProblem.__init__(self, pointset.points, forward_map, variance)
+        pointset = Mesh1d.construct(num_pts)
+        pointset = pointset*0.6 + 0.01
+        InverseProblem.__init__(self, pointset, forward_map, variance)
 
 
 """
+FEM IP
 """
 class FEMInverseProblem(InverseProblem):
 
     """
     solves -(alpha(x,u) u'(x,a))' = 1 
     for alpha(x,u) = 0.1 * sum_{i=1}^K e^(a_i*x)
-    at coefficient a with mesh width h
-    and gives output measurements at pointset vec_J subset [0,1]
     """
     def __init__(self, input_dim = 1, eval_pts = np.random.rand(1,1), meshwidth = 1./32., variance = 0.001):
         
@@ -150,9 +148,9 @@ class FEMInverseProblem(InverseProblem):
             solFct = interpolate.interp1d(nodes, solCoeffWithBdry)
             return solFct(obsPtSet)
 
-        true_input = Random(input_dim, 1)
+        true_input = Random.construct(input_dim, 1)
 
-        InverseProblem.__init__(self, true_input.points, forward_map_fem, variance)
+        InverseProblem.__init__(self, true_input, forward_map_fem, variance)
 
 
 

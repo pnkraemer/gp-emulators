@@ -170,9 +170,9 @@ import matplotlib.pyplot as plt
 
 
 #aposterior = ApproximatePosteriorPotential(fem_ip, cond_gp)
-posterior.compute_norm_const(10000)
+posterior.compute_norm_const(1000)
 #aposterior.compute_norm_const(1000)
-approx_post.compute_norm_const(10000)
+approx_post.compute_norm_const(1000)
 
 #print("Z =", posterior.potential(eval_pts))
 #print("aZ =", aposterior.potential(eval_pts))
