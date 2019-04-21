@@ -5,7 +5,7 @@ PURPOSE: Quadrature formulas on rectangular domains
 """
 
 import numpy as np
-from pointsets import PointSet, Random, Lattice
+from pointsets import Random, Lattice
 
 
 """
@@ -13,17 +13,27 @@ Quadrature base class: nodes and weights
 """
 class Quadrature:
 
+    """
+    nodes: an (n, d) array
+    weights: an (n, ) array
+    """
     def __init__(self, nodes, weights):
         self.nodes = nodes
         self.weights = weights
 
-    def compute_integral(self, integrand):
-        num_nodes = len(self.weights)
-        approx = 0.
-        for i in range(num_nodes):
-            approx = approx + self.weights[i] * integrand(self.nodes[i])
-        return approx
+    """
+    integrand is a function that takes (n,d) points as an input
+    and gives (n,) evaluations, i.e which can be vectorised 
+    """
+    def compute(self, integrand):
+        values = integrand(self.nodes)
+        return self.weights.dot(values)
 
+
+    @staticmethod
+    def compute_integral(integrand, nodes, weights):
+        values = integrand(nodes)
+        return weights.dot(values)
 
 """
 Monte Carlo quadrature
@@ -31,34 +41,19 @@ Monte Carlo quadrature
 class MonteCarlo(Quadrature):
 
     def __init__(self, num_pts, dim):
-        random_nodes = Random(num_pts, dim)
-        weights = 1./num_pts * np.ones(num_pts)
-        Quadrature.__init__(self, random_nodes.points, weights)
+        random_nodes = Random.construct(num_pts, dim)
+        weights = np.ones(num_pts)/(1.0*num_pts) 
+        Quadrature.__init__(self, random_nodes, weights)
 
     @staticmethod
-    def fast_approximate(num_pts, dim, integrand):
-        nodes = Random(num_pts, dim)
-        values = integrand(nodes.points)
-        #print(values)
-        return np.sum(values)/float(num_pts)
+    def compute_integral(integrand, num_pts, dim):
+        nodes = Random.construct(num_pts, dim)
+        #nodes = np.random.rand(num_pts, dim)
+        values = integrand(nodes)
+        return np.sum(values)/(1.0 *num_pts)
 
 
 
-
-
-
-"""
-Some Testing
-TODO: make a testing class -- this 
-snippet here is run at every import which is really annoying!!
-"""
-# def product(pt): 
-# 	return np.prod(pt)
-
-# num_pts = 1000000
-# dim = 1
-# mc = MonteCarlo(num_pts, dim)
-# print(mc.compute_integral(product))
 
 
 

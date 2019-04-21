@@ -1,7 +1,6 @@
 """
 NAME: gpvisual.py
 
-PURPOSE: Visualisation class for GP
 """
 
 from matplotlib import pyplot as plt
@@ -9,8 +8,7 @@ from matplotlib import animation
 import numpy as np
 
 from pointsets import Mesh1d
-from gaussianprocesses import GaussianProcess#, ConditionedGaussianProcess
-
+from gaussianprocesses import *
 
 class GPVisual():
 
@@ -35,8 +33,8 @@ class GPVisual():
         self.ax = axis
         self.gp = GaussProc
         self.num_pts = num_pts
-        self.mesh = Mesh1d(self.num_pts).points
-        self.mean_vec = self.gp.mean_fct.assemble_mean_vec(self.mesh)
+        self.mesh = Mesh1d.construct(self.num_pts)
+        self.mean_vec = self.gp.mean_fct.evaluate(self.mesh)
         self.color = ctheme
 
     def addplot_mean(self):
@@ -45,7 +43,7 @@ class GPVisual():
 
 
     def addplot_deviation(self, num_dev = 2):
-        cov_mtrx = self.gp.cov_fct.assemble_cov_mtrx(self.mesh, self.mesh)
+        cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
         pos_dev = self.mean_vec.T + 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
         neg_dev = self.mean_vec.T - 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
         self.ax.fill_between(self.mesh[:,0], neg_dev[0,:], pos_dev[0,:], 
@@ -55,7 +53,7 @@ class GPVisual():
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):
             samp = self.gp.sample(self.mesh)
-            self.ax.plot(self.mesh, samp, '-', color = 0.4*np.random.rand(3,))
+            self.ax.plot(self.mesh, samp, '-', color = 0.5*np.random.rand(3,))
 
     def addplot_observations(self):
         if self.gp.data is None:

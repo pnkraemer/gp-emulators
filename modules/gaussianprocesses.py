@@ -9,8 +9,8 @@ the conditioned gp should be an instance of gp
 """
 import numpy as np 
 
-from covariances import Covariance, MaternCov
-from means import Mean, ZeroMean
+from covariances import *
+from means import *
 from data import Data
 import sys
 
@@ -23,6 +23,7 @@ class GaussianProcess:
     def __init__(self, mean_fct, cov_fct):
         self.mean_fct = mean_fct
         self.cov_fct = cov_fct
+        self.is_conditioned = False
 
     def sample(self, sample_locations):
         mean_vec = self.mean_fct.evaluate(sample_locations)
@@ -70,5 +71,6 @@ class ConditionedGaussianProcess(GaussianProcess):
             return cov_mtrx_new - cov_mtrx_new2.dot(inv_cov).dot(cov_mtrx_new3)
 
         GaussianProcess.__init__(self, Mean(new_mean_fct), Covariance(new_cov_fct))
+        self.is_conditioned = True
 
 
