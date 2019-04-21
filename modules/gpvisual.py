@@ -42,6 +42,12 @@ class GPVisual():
                      label = "Mean function")
 
 
+    def addplot_truth(self):
+        assert(self.gp.is_conditioned==True), "Not a conditioned GP!"
+        self.ax.plot(self.mesh, self.gp.data.forward_map(self.mesh) , color = "darkred", linestyle = "dashed", linewidth = 2, 
+                     label = "True function")
+
+
     def addplot_deviation(self, num_dev = 2):
         cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
         pos_dev = self.mean_vec.T + 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
@@ -50,28 +56,37 @@ class GPVisual():
                              facecolor = self.color, linewidth = 1, linestyle = "-", 
                              alpha = 0.3, label = "Confidence interval")
 
+    def addplot_fancy_deviation(self, num_dev = 3):
+        cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
+        num_shades = 50
+        shade = 1.0/num_shades
+        for i in range(num_shades):
+            pos_dev = self.mean_vec.T + i*shade*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
+            neg_dev = self.mean_vec.T - i*shade*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
+            self.ax.fill_between(self.mesh[:,0], neg_dev[0,:], pos_dev[0,:], 
+                                 facecolor = self.color, linewidth = 1, linestyle = "-", 
+                                 alpha = shade)
+
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):
             samp = self.gp.sample(self.mesh)
             self.ax.plot(self.mesh, samp, '-', color = 0.5*np.random.rand(3,))
 
     def addplot_observations(self):
-        if self.gp.data is None:
-            print("This GP does not have data, hence no observations")
+        assert(self.gp.is_conditioned==True), "Not a conditioned GP!"
+        locations = self.gp.data.locations
+        observations = self.gp.data.observations
+        self.ax.plot(locations, observations, 'o', color = "white")
+        if self.gp.data.variance == 0:
+            self.ax.plot(locations, observations, 'o', color = self.color,
+                         markerfacecolor = "white", markeredgecolor = self.color, 
+                         markeredgewidth = 1, label = "Observations")
         else:
-            locations = self.gp.data.locations
-            observations = self.gp.data.observations
-            self.ax.plot(locations, observations, 'o', color = "white")
-            if self.gp.data.variance == 0:
-                self.ax.plot(locations, observations, 'o', color = self.color,
-                             markerfacecolor = "white", markeredgecolor = self.color, 
-                             markeredgewidth = 1, label = "Observations")
-            else:
-                self.ax.errorbar(locations, observations, 
-                             yerr = np.sqrt(self.gp.data.variance), color = self.color, 
-                             fmt='o', markerfacecolor = "white", 
-                             markeredgecolor = self.color, markeredgewidth = 1, 
-                             capsize = 3, label = "Observations")
+            self.ax.errorbar(locations, observations, 
+                         yerr = np.sqrt(self.gp.data.variance), color = self.color, 
+                         fmt='o', markerfacecolor = "white", 
+                         markeredgecolor = self.color, markeredgewidth = 1, 
+                         capsize = 3, label = "Observations")
 
 
     def addanimation_samples(self):

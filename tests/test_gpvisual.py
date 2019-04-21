@@ -9,11 +9,12 @@ from data import *
 np.random.seed(1)
 
 gp = StandardGP()
-gp_data = ToyGPData1d()
+gp_data = ToyGPData1d(num_pts = 3)
 cgp = ConditionedGaussianProcess(gp, gp_data)
 
 gpvis = GPVisual(cgp)
 gpvis.addplot_mean()
+gpvis.addplot_truth()
 gpvis.addplot_deviation()
 gpvis.addplot_samples()
 gpvis.addplot_observations()
@@ -22,7 +23,8 @@ plt.show()
 
 gpvis2 = GPVisual(cgp)
 gpvis2.addplot_mean()
-gpvis2.addplot_deviation()
+gpvis2.addplot_fancy_deviation()
+gpvis2.addplot_truth()
 gpvis2.addanimation_samples()
 gpvis2.addplot_observations()
 plt.legend()

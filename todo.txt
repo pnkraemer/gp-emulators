@@ -5,7 +5,3 @@ TODO LIST FOR GP-EMULATORS:
 
 
 TODO LIST FOR GP-EMULATORS (META):
-- make pointset functions staticmethods
-- write tests for each module: use every function once and check simple stuff
-- make performance better
-- comment

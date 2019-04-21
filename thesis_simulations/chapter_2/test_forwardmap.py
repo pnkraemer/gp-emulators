@@ -4,7 +4,7 @@ import sys
 
 
 sys.path.insert(0, "../../modules")
-from pointsets import PointSet, Random, Mesh1d
+from pointsets import Random, Mesh1d
 from data import Data, InverseProblem, FEMInverseProblem
 from quadrature import MonteCarlo
 from posterior import Posterior, ApproximatePosterior
@@ -139,7 +139,7 @@ gp = GaussianProcess(mean_fct, cov_fct)
 
 
 num_design_pts = 25
-design_ptset = Mesh1d(num_design_pts)
+design_ptset = Mesh1d.construct(num_design_pts)
 
 
 
@@ -188,14 +188,14 @@ print("error_apprxs =", approx_post.norm_const)
 #print(posterior.density(np.array([[0.5]])))
 #print("fine so far")
 
-A = Mesh1d(500)
-B = posterior.density(A.points)
-C = approx_post.density(A.points)
+A = Mesh1d.construct(500)
+B = posterior.density(A)
+C = approx_post.density(A)
 #D = aposterior.density(A.points)
 
 plt.style.use("ggplot")
-plt.plot(A.points, B, linewidth = 2, label ="posterior")
-plt.plot(A.points, C, linewidth = 4, alpha = 0.5, label = "approx")
+plt.plot(A, B, linewidth = 2, label ="posterior")
+plt.plot(A, C, linewidth = 4, alpha = 0.5, label = "approx")
 #plt.plot(A.points, D,'o', color = "black", label = "aposterior")
 plt.legend()
 plt.show()
