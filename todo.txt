@@ -2,6 +2,7 @@ TODO LIST FOR GP-EMULATORS:
 - hellinger distance comparison
 - bayesian quadrature
 - bayesian optimisation
+- MCMC
 
 
 TODO LIST FOR GP-EMULATORS (META):

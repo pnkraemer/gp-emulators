@@ -56,16 +56,15 @@ class GPVisual():
                              facecolor = self.color, linewidth = 1, linestyle = "-", 
                              alpha = 0.3, label = "Confidence interval")
 
-    def addplot_fancy_deviation(self, num_dev = 3):
+    def addplot_fancy_deviation(self, num_shades = 50, num_dev = 3):
         cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
-        num_shades = 50
         shade = 1.0/num_shades
         for i in range(num_shades):
             pos_dev = self.mean_vec.T + i*shade*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
             neg_dev = self.mean_vec.T - i*shade*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
             self.ax.fill_between(self.mesh[:,0], neg_dev[0,:], pos_dev[0,:], 
                                  facecolor = self.color, linewidth = 1, linestyle = "-", 
-                                 alpha = shade)
+                                 alpha = 0.75*shade)
 
     def addplot_samples(self, num_samp = 5):
         for i in range(num_samp):

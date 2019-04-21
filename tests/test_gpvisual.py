@@ -23,7 +23,7 @@ plt.show()
 
 gpvis2 = GPVisual(cgp)
 gpvis2.addplot_mean()
-gpvis2.addplot_fancy_deviation()
+gpvis2.addplot_fancy_deviation(num_shades = 50)
 gpvis2.addplot_truth()
 gpvis2.addanimation_samples()
 gpvis2.addplot_observations()
