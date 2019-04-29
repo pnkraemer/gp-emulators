@@ -61,5 +61,5 @@ for i in range(num_plotpts):
 print("\nTrue input/output:")
 print("(", toy_ip.locations[0,0], ",", posterior.density(toy_ip.locations)[0], ")")
 
-print("\nCond mean:\n", cond_mean)
+print("\nCond mean:\n", cond_mean[0,0])
 print("\nMAP:\n", locations[mapindex, 0])
