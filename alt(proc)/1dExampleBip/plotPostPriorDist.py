@@ -60,7 +60,7 @@ plt.ylabel("Probability")
 plt.ylim((-0.1,2.5))
 plt.plot(plotPts, posteriorVals, label = "Posterior density $\pi^y$")
 plt.plot(plotPts,  priorVals, label = "Prior density $\pi_0$")
-plt.vlines(trueInput, 0, 0.5 * evaluatePotential(trueInput, normConst), label = "True input value")
+plt.vlines(trueInput, 0, , label = "True input value")
 plt.legend()
 plt.savefig("figures/plotPostPriorDist.png", bbox_inches ="tight")
 

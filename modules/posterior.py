@@ -1,7 +1,5 @@
 """
-NAME: likelihood.py
-
-PURPOSE: likelihood functions, inverse problem info plus methods
+NAME: posterior.py
 
 NOTE: We only consider additive Gaussian noise
 """
@@ -18,9 +16,10 @@ from covariances import MaternCov
 from gaussianprocesses import GaussianProcess, ConditionedGaussianProcess
 
 class Posterior():
-	def __init__(self, inverse_problem):
+	def __init__(self, inverse_problem, prior_density):
 		self.ip = inverse_problem
 		self.norm_const = None
+		self.prior_density = prior_density
 
 	def potential(self, locations):
 		diff = np.zeros(len(locations))
@@ -32,15 +31,19 @@ class Posterior():
 		return np.exp(-self.potential(locations)/(2*self.ip.variance))
 
 	def compute_norm_const(self, num_mc_pts = 10000):
+
+		def integrand(locations):
+			return self.likelihood(locations) * self.prior_density(locations)
+
 		num_true_inputs = len(self.ip.locations)
-		self.norm_const = MonteCarlo.compute_integral(self.likelihood, num_mc_pts, num_true_inputs)
+		self.norm_const = MonteCarlo.compute_integral(integrand, num_mc_pts, num_true_inputs)
 
 	def density(self, locations):
 		if self.norm_const is None:
 			print("Computing normalisation constant on N = 10000 pts...", end = "")
 			self.compute_norm_const(10000)	
 			print("done!")	
-		return self.likelihood(locations)/self.norm_const
+		return self.likelihood(locations)/self.norm_const * self.prior_density(locations)
 
 
 

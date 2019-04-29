@@ -57,5 +57,3 @@ class MonteCarlo(Quadrature):
 
 
 
-
-
