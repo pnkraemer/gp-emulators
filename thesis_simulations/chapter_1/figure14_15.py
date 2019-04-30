@@ -13,7 +13,7 @@ mcmc_samples, proposals, accepted = MetropolisHastings.sample1d_with_proposals(n
 import matplotlib.pyplot as plt 
 import numpy as np
 
-np.random.seed(123)
+np.random.seed(7)
 plt.style.use("fivethirtyeight")
 plt_locations = np.linspace(-6, 6, 250)
 plt_values_gaussdens = norm.pdf(plt_locations)
