@@ -5,7 +5,7 @@ AUTHOR: data class, noisy observations on locations
 
 NOTE: We only consider additive Gaussian noise
 """
-
+import sys
 import numpy as np
 from pointsets import Random, Mesh1d
 from scipy import interpolate
@@ -116,6 +116,7 @@ class FEMInverseProblem(InverseProblem):
 
             def compIntExp(coeff, lowerBd, upperBd):
                 intSum = 0
+                coeff = coeff[0]
                 for idx in range(len(coeff)):
                     if coeff[idx] > 0:
                         intSum = intSum + (np.exp(coeff[idx]*upperBd)-np.exp(coeff[idx]*lowerBd))/coeff[idx]
@@ -148,7 +149,7 @@ class FEMInverseProblem(InverseProblem):
             solFct = interpolate.interp1d(nodes, solCoeffWithBdry)
             return solFct(obsPtSet)
 
-        true_input = Random.construct(input_dim, 1)
+        true_input = Random.construct(1, input_dim)
 
         InverseProblem.__init__(self, true_input, forward_map_fem, variance)
 

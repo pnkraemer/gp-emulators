@@ -10,12 +10,13 @@ import sys
 sys.path.insert(0, "../../modules")
 from pointsets import *
 from data import Data, FEMInverseProblem
-from quadrature import MonteCarlo
+from quadrature import MonteCarlo, QuasiMonteCarlo
 from means import ZeroMean
 from covariances import MaternCov
 from gaussianprocesses import GaussianProcess, ConditionedGaussianProcess
 
 class Posterior():
+
 	def __init__(self, inverse_problem, prior_density):
 		self.ip = inverse_problem
 		self.norm_const = None
@@ -35,14 +36,15 @@ class Posterior():
 		def integrand(locations):
 			return self.likelihood(locations) * self.prior_density(locations)
 
-		num_true_inputs = len(self.ip.locations)
-		self.norm_const = MonteCarlo.compute_integral(integrand, num_mc_pts, num_true_inputs)
+		num_true_inputs = len(self.ip.locations.T)
+		print(num_true_inputs)
+		self.norm_const = QuasiMonteCarlo.compute_integral(integrand, num_mc_pts, num_true_inputs)
 
 	def density(self, locations):
 		if self.norm_const is None:
 			print("Computing normalisation constant on N = 10000 pts...", end = "")
 			self.compute_norm_const(10000)	
-			print("done!")	
+			print("done!")
 		return self.likelihood(locations)/self.norm_const * self.prior_density(locations)
 
 
@@ -51,7 +53,7 @@ class Posterior():
 class ApproximatePosterior(Posterior):
 
 	def __init__(self, posterior, gp):
-		Posterior.__init__(self, posterior.ip)
+		Posterior.__init__(self, posterior.ip, posterior.prior_density)
 		self.gp = gp
 		self.posterior = posterior
 
