@@ -37,7 +37,6 @@ class Posterior():
 			return self.likelihood(locations) * self.prior_density(locations)
 
 		num_true_inputs = len(self.ip.locations.T)
-		print(num_true_inputs)
 		self.norm_const = QuasiMonteCarlo.compute_integral(integrand, num_mc_pts, num_true_inputs)
 
 	def density(self, locations):
