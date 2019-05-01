@@ -11,11 +11,10 @@ class Distance():
 
 class RMSE(Distance):
     
-    
     """
     RMSE.random takes functions which take (only) pointsets as input and have 1d output
     """
     @staticmethod
-    def random(truth, function, num_evals = 999, eval_dim = 1):
+    def compute(truth, function, num_evals = 9999, eval_dim = 1):
         eval_ptset = Random.construct(num_evals, eval_dim)
-        return np.linalg.norm(truth(eval_ptset) - approximation(eval_ptset)) / np.sqrt(num_evals)
+        return np.linalg.norm(truth(eval_ptset) - function(eval_ptset), ord = None) / np.sqrt(num_evals)
