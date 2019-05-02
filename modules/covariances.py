@@ -17,7 +17,7 @@ class Covariance:
     def evaluate(self, pointset1, pointset2, shift = 0.):
         cov_mtrx = self.cov_fct(pointset1, pointset2)
         if shift > 0:
-            assert(np.array_equal(points1, points2) == 1), "Shift inappropriate for different pointsets"
+            assert(np.array_equal(points1, points2) == 1), "Shifting inappropriate for different pointsets"
             cov_mtrx = cov_mtrx + shift * np.identity(len(points1))
         return cov_mtrx
 
