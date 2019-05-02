@@ -105,8 +105,8 @@ FEM IP
 class FEMInverseProblem(InverseProblem):
 
     """
-    solves -(alpha(x,u) u'(x,a))' = 1 
-    for alpha(x,u) = 0.1 * sum_{i=1}^K e^(a_i*x)
+    solves -(alpha(x,a) u'(x,a))' = 1 
+    for alpha(x,a) = 1 + 0.1 * sum_{i=1}^K sin(a_i*x)
     """
     def __init__(self, input_dim = 1, eval_pts = np.random.rand(1,1), meshwidth = 1./32., variance = 0.001):
         
@@ -119,10 +119,8 @@ class FEMInverseProblem(InverseProblem):
                 coeff = coeff[0]
                 for idx in range(len(coeff)):
                     if coeff[idx] > 0:
-                        intSum = intSum + (np.exp(coeff[idx]*upperBd)-np.exp(coeff[idx]*lowerBd))/coeff[idx]
-                    else:
-                        intSum = intSum + upperBd - lowerBd
-                return 0.1 * intSum
+                        intSum = intSum + (np.cos(coeff[idx]*lowerBd)-np.cos(coeff[idx]*upperBd))/coeff[idx]
+                return (upperBd - lowerBd) * 1.0 + 0.1 * intSum
 
             numNodes = int(1.0/meshwidth) + 1
             numIntNodes = numNodes - 2  

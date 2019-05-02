@@ -33,9 +33,9 @@ class Hellinger(Distance):
 		num_true_coeff = len(post1.ip.locations.T)
 
 		def sqrtdens(ptset):
-			return (np.sqrt(post1.density(ptset)) - np.sqrt(post2.density(ptset)))**2
+			return (np.sqrt(post1.density(ptset)) - np.sqrt(post2.density(ptset)))**2 * post1.prior_density(ptset)
 
-		return 0.5 * np.sqrt(QuasiMonteCarlo.compute_integral(sqrtdens, num_qmc_pts, num_true_coeff))
+		return np.sqrt(0.5 * QuasiMonteCarlo.compute_integral(sqrtdens, num_qmc_pts, num_true_coeff))
 
 
 
