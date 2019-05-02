@@ -14,7 +14,7 @@ np.random.seed(2)
 
 num_it = 10
 num_coeff = 1
-num_qmc_pts = 100
+num_qmc_pts = 10000
 num_design_pts = 1
 s = 1.5
 prior_mean = ZeroMean()
@@ -26,7 +26,7 @@ num_eval_pts = 1
 eval_pts = Random.construct(num_eval_pts, 1)
 fem_ip = FEMInverseProblem(input_dim = num_coeff, eval_pts = eval_pts)
 print("\nnum_qmc =", num_qmc_pts)
-print("\n\ns =", s)
+print("\ns =", s)
 print("\nAppr. of forward map:")
 for i in range(num_it):
 	num_design_pts = 2*num_design_pts

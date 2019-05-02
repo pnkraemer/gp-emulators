@@ -13,7 +13,7 @@ from covariances import *
 from means import *
 from data import Data
 import sys
-
+import scipy.linalg
 
 """
 A Gaussian process is a mean function and a covariance function
@@ -62,14 +62,18 @@ class ConditionedGaussianProcess(GaussianProcess):
             mean_vec_newloc = GP.mean_fct.evaluate(loc)
             cov_mtrx = GP.cov_fct.evaluate(loc, data.locations)
             obs2 = data.observations - mean_vec_oldloc
-            coeff = np.linalg.solve(cm, obs2)
+            lu, piv = scipy.linalg.lu_factor(cm)
+            coeff = scipy.linalg.lu_solve((lu, piv), obs2)
+#            coeff = np.linalg.solve(cm, obs2)
             return mean_vec_newloc + cov_mtrx.dot(coeff)
 
         def new_cov_fct(loc1, loc2, data = self.data, GP = GaussProc, cm = self.cov_mtrx):
             cov_mtrx_new = GP.cov_fct.evaluate(loc1, loc2)
             cov_mtrx_new2 = GP.cov_fct.evaluate(loc1, data.locations)
             cov_mtrx_new3 = GP.cov_fct.evaluate(data.locations, loc2)
-            coeff = np.linalg.solve(cm, cov_mtrx_new3)
+            lu, piv = scipy.linalg.lu_factor(cm)
+            coeff = scipy.linalg.lu_solve((lu, piv), cov_mtrx_new3)
+#            coeff = np.linalg.solve(cm, cov_mtrx_new3)
             return cov_mtrx_new - cov_mtrx_new2.dot(coeff)
 
         GaussianProcess.__init__(self, Mean(new_mean_fct), Covariance(new_cov_fct))
