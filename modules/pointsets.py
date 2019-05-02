@@ -107,7 +107,8 @@ class Lattice():
 
     # path is a string to the .txt file
     @staticmethod
-    def construct(num_pts, dim, path = '/Users/nicholaskramer/Documents/GitHub/gp-emulators/modules/vectors/lattice-39102-1024-1048576.3600.txt', rand_shift = True):
+#    def construct(num_pts, dim, path = 'vectors/lattice-39102-1024-1048576.3600.txt', rand_shift = True):
+    def construct(num_pts, dim, path = '/home/kraemer/Documents/gp-emulators/modules/vectors/lattice-39102-1024-1048576.3600.txt', rand_shift = True):
 
         def load_gen_vec(path, dim):
             gen_vec = np.loadtxt(path)

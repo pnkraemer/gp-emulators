@@ -26,18 +26,18 @@ class Posterior():
 		diff = np.zeros(len(locations))
 		for i in range(len(locations)):
 			diff[i] = np.linalg.norm(self.ip.observations - self.ip.forward_map(locations[i,:].reshape((1, len(locations.T)))))**2
-		return diff
+		return diff.reshape((len(locations),1))/(2*self.ip.variance)
 
 	def likelihood(self, locations):
-		return np.exp(-self.potential(locations)/(2*self.ip.variance))
+		return np.exp(-self.potential(locations))
 
-	def compute_norm_const(self, num_mc_pts = 10000):
+	def compute_norm_const(self, num_qmc_pts = 10000):
 
 		def integrand(locations):
 			return self.likelihood(locations) * self.prior_density(locations)
 
 		num_true_inputs = len(self.ip.locations.T)
-		self.norm_const = QuasiMonteCarlo.compute_integral(integrand, num_mc_pts, num_true_inputs)
+		self.norm_const = QuasiMonteCarlo.compute_integral(integrand, num_qmc_pts, num_true_inputs)
 
 	def density(self, locations):
 		if self.norm_const is None:
@@ -58,19 +58,17 @@ class ApproximatePosterior(Posterior):
 
 	def potential2(self, locations):
 		diff = np.zeros(len(locations))
-		for i in range(len(locations)):
-			evaluate = self.gp.mean_fct.evaluate(np.array([locations[i,:]]))
-			diff[i] = np.linalg.norm(self.ip.observations - evaluate)**2
-		return diff
+		evaluate = self.gp.mean_fct.evaluate(locations)
+		diff = self.ip.observations  - evaluate
+		normdiff = np.sum(np.abs(diff)**2,axis=-1)
+		return normdiff.reshape((len(locations),1))/(2*self.ip.variance)
 
 	"""
 	num_observations is output dimension of forward model
 	"""
 	def makedata(self, locations, approximand, num_observations = 1):
 		ip = self.posterior.ip
-		observations = np.zeros((len(locations), num_observations))
-		for i in range(len(locations)):
-			observations[i,:] = approximand(locations[i,:].reshape((1, len(locations.T))))
+		observations = approximand(locations)
 		self.approx_data = Data(locations, observations, 0.0)
 		self.gp = ConditionedGaussianProcess(self.gp, self.approx_data)
 
@@ -80,11 +78,7 @@ class ApproximatePosterior(Posterior):
 		self.potential = self.potential2
 
 	def potential3(self, locations):
-		diff = np.zeros(len(locations))
-		for i in range(len(locations)):
-			evaluate = self.gp.mean_fct.evaluate(np.array([locations[i,:]]))
-			diff[i] = evaluate
-		return diff
+		return self.gp.mean_fct.evaluate(locations).reshape((len(locations),1))
 
 	def approximate_potential(self, pointset):
 		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
@@ -93,11 +87,53 @@ class ApproximatePosterior(Posterior):
 
 
 	def likelihood2(self, locations):
-		approx_potent = np.zeros(len(locations))
-		for i in range(len(locations)):
-			evaluate = self.gp.mean_fct.evaluate(np.array([locations[i,:]]))
-			approx_potent[i] = evaluate
-		return approx_potent
+		return self.gp.mean_fct.evaluate(locations).reshape((len(locations),1))
+
+	def approximate_likelihood(self, pointset):
+		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
+		self.makedata(pointset, self.posterior.likelihood)
+		self.likelihood = self.likelihood2
+
+
+class SampleApproximatePosterior(Posterior):
+
+	def __init__(self, posterior, gp):
+		Posterior.__init__(self, posterior.ip, posterior.prior_density)
+		self.gp = gp
+		self.posterior = posterior
+
+	def potential2(self, locations):
+		diff = np.zeros(len(locations))
+		evaluate = self.gp.sample(locations).reshape((len(locations), 1))
+		diff = self.ip.observations * np.ones(evaluate.shape) - evaluate
+		normdiff = np.sum(np.abs(diff)**2,axis=-1)
+		return normdiff.reshape((len(locations),1))/(2*self.ip.variance)
+
+	"""
+	num_observations is output dimension of forward model
+	"""
+	def makedata(self, locations, approximand, num_observations = 1):
+		ip = self.posterior.ip
+		observations = approximand(locations)
+		self.approx_data = Data(locations, observations, 0.0)
+		self.gp = ConditionedGaussianProcess(self.gp, self.approx_data)
+
+	def approximate_forwardmap(self, pointset, num_observations = 1):
+		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
+		self.makedata(pointset, self.ip.forward_map)
+		self.potential = self.potential2
+
+	def potential3(self, locations):
+		return self.gp.sample(locations).reshape((len(locations),1))
+
+	def approximate_potential(self, pointset):
+		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
+		self.makedata(pointset, self.posterior.potential)
+		self.potential = self.potential3
+
+
+	def likelihood2(self, locations):
+		return self.gp.sample(locations).reshape((len(locations),1))
 
 	def approximate_likelihood(self, pointset):
 		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"

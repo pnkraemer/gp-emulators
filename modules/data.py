@@ -61,10 +61,10 @@ class ToyInverseProblem1d(InverseProblem):
             dim = len(points.T)
             assert(dim==1), "Forward map is 1D, pointset is not"
 
-            observations = np.zeros((num_pts, 1))
-            for i in range(num_pts):
-                observations[i, 0] = sine(points[i, 0])
-            return observations * np.ones(num_pts)
+#           observations = np.zeros((num_pts, 1))
+#           for i in range(num_pts):
+#               observations[i, 0] = sine(points[i, 0])
+            return sine(points).reshape((num_pts, 1)) 
 
         pointset = Random.construct(num_pts, 1)
         InverseProblem.__init__(self, pointset, forward_map, variance)
@@ -89,10 +89,10 @@ class ToyGPData1d(InverseProblem):
             dim = len(points.T)
             assert(dim==1), "Forward map is 1D, pointset is not"
 
-            observations = np.zeros((num_pts, 1))
-            for i in range(num_pts):
-                observations[i, 0] = exp_sine(points[i, 0])
-            return observations
+#            observations = np.zeros((num_pts, 1))
+#            for i in range(num_pts):
+#                observations[i, 0] = exp_sine(points[i, 0])
+            return exp_sine(points).reshape((num_pts, 1))
 
         pointset = Mesh1d.construct(num_pts)
         pointset = pointset*0.6 + 0.01
@@ -147,11 +147,20 @@ class FEMInverseProblem(InverseProblem):
 
             nodes =  np.linspace(0,1,numNodes)
             solFct = interpolate.interp1d(nodes, solCoeffWithBdry)
-            return solFct(obsPtSet)
+            return solFct(obsPtSet).reshape((1, len(obsPtSet)))
+        
+        def forward_map(locations):
+            evaluations = np.zeros((len(locations), 1))
+            for i in range(len(locations)):
+                evaluations[i,0] = forward_map_fem(locations[i,:].reshape((1,len(locations.T))))
+            return evaluations
+
+
+
 
         true_input = Random.construct(1, input_dim)
 
-        InverseProblem.__init__(self, true_input, forward_map_fem, variance)
+        InverseProblem.__init__(self, true_input, forward_map, variance)
 
 
 
