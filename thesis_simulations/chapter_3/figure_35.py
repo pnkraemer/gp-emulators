@@ -14,7 +14,7 @@ np.random.seed(2)
 
 num_it = 5
 num_coeff = 2
-num_qmc_pts = 10000
+num_qmc_pts = 1000
 num_design_pts = 4
 
 s = 1

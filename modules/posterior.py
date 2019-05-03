@@ -87,7 +87,8 @@ class ApproximatePosterior(Posterior):
 
 
 	def likelihood2(self, locations):
-		return self.gp.mean_fct.evaluate(locations).reshape((len(locations),1))
+		meanfct =  self.gp.mean_fct.evaluate(locations).reshape((len(locations),1))
+		return np.where(meanfct > 0, meanfct, 0)
 
 	def approximate_likelihood(self, pointset):
 		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
@@ -133,7 +134,8 @@ class SampleApproximatePosterior(Posterior):
 
 
 	def likelihood2(self, locations):
-		return self.gp.sample(locations).reshape((len(locations),1))
+		samples =  self.gp.sample(locations).reshape((len(locations),1))
+		return np.where(samples > 0, samples, 0)
 
 	def approximate_likelihood(self, pointset):
 		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"

@@ -66,7 +66,7 @@ approx_post_pttl.density(ptset)
 
 gp = StandardGP()
 approx_post_llh = MarginalApproximatePosterior(posterior, gp)
-approx_post_llh.approximate_likelihood(ptset)
+approx_post_llh.approximate_forwardmap(ptset)
 approx_post_llh.compute_norm_const(1000)
 approx_post_llh.density(ptset)
 
