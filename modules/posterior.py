@@ -142,9 +142,61 @@ class SampleApproximatePosterior(Posterior):
 
 
 
+class MarginalApproximatePosterior(SampleApproximatePosterior):
+
+	def __init__(self, posterior, gp, num_mc_pts_vGN = 100):
+		SampleApproximatePosterior.__init__(self, posterior, gp)
+		self.num_mc_pts_vGN = num_mc_pts_vGN
+
+	def potential2(self, locations):
+		diff = np.zeros(len(locations))
+		evaluate = self.gp.sample_many(locations, num_samps = self.num_mc_pts_vGN)#.reshape((len(locations),1))
+		diff = self.ip.observations * np.ones(evaluate.shape) - evaluate
+		normdiff = np.abs(diff)**2
+		return normdiff/(2*self.ip.variance)
+
+	"""
+	num_observations is output dimension of forward model
+	"""
+	def makedata(self, locations, approximand, num_observations = 1):
+		ip = self.posterior.ip
+		observations = approximand(locations)
+		self.approx_data = Data(locations, observations, 0.0)
+		self.gp = ConditionedGaussianProcess(self.gp, self.approx_data)
+
+	def approximate_forwardmap(self, pointset, num_observations = 1):
+		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
+		self.makedata(pointset, self.ip.forward_map)
+		self.potential = self.potential2
+
+	def potential3(self, locations):
+		return self.gp.sample_many(locations, num_samps = self.num_mc_pts_vGN)#.reshape((len(locations),1))
+
+	def approximate_potential(self, pointset):
+		assert(self.gp.is_conditioned == False), "Approximation already in use! Make new posterior"
+		self.makedata(pointset, self.posterior.potential)
+		self.potential = self.potential3
+
+	def approximate_likelihood(self, pointset):
+		print("No marginal likelihood approximations")
+
+	def compute_norm_const(self, num_qmc_pts = 10000):
+
+		def integrand(locations):
+			return self.likelihood(locations) * self.prior_density(locations)
+
+		num_true_inputs = len(self.ip.locations.T)
+		qmc = QuasiMonteCarlo.compute_integral(integrand, num_qmc_pts, num_true_inputs)
+		self.norm_const = np.sum(qmc, axis = 1)/self.num_mc_pts_vGN
+		
 
 
-
+	def density(self, locations):
+		if self.norm_const is None:
+			print("Computing normalisation constant on N = 10000 pts...", end = "")
+			self.compute_norm_const(10000)	
+			print("done!")
+		return (np.sum(self.likelihood(locations), axis = 1)).reshape((len(locations), 1))/(self.num_mc_pts_vGN * self.norm_const) * self.prior_density(locations)
 
 
 # num_true_inputs = 1

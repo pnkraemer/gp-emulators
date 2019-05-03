@@ -56,6 +56,20 @@ approx_post_llh.approximate_likelihood(ptset)
 approx_post_llh.compute_norm_const(1000)
 approx_post_llh.density(ptset)
 
+
+
+gp = StandardGP()
+approx_post_pttl = MarginalApproximatePosterior(posterior, gp)
+approx_post_pttl.approximate_potential(ptset)
+approx_post_pttl.compute_norm_const(1000)
+approx_post_pttl.density(ptset)
+
+gp = StandardGP()
+approx_post_llh = MarginalApproximatePosterior(posterior, gp)
+approx_post_llh.approximate_likelihood(ptset)
+approx_post_llh.compute_norm_const(1000)
+approx_post_llh.density(ptset)
+
 print("\n1d fine\n")
 
 
@@ -74,9 +88,10 @@ val2 = posterior.density(pts)
 
 
 
+
 approx_post = ApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_forwardmap(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -86,8 +101,8 @@ plt.legend()
 plt.show()
 
 approx_post = ApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_potential(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -97,8 +112,8 @@ plt.legend()
 plt.show()
 
 approx_post = ApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_likelihood(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -108,8 +123,8 @@ plt.legend()
 plt.show()
 
 approx_post = SampleApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_forwardmap(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -119,8 +134,8 @@ plt.legend()
 plt.show()
 
 approx_post = SampleApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_potential(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -130,8 +145,8 @@ plt.legend()
 plt.show()
 
 approx_post = SampleApproximatePosterior(posterior, gp)
-approx_post.compute_norm_const(1000)
 approx_post.approximate_likelihood(ptset)
+approx_post.compute_norm_const(1000)
 approx_post.density(ptset)
 val1 = approx_post.density(pts)
 plt.figure()
@@ -139,6 +154,42 @@ plt.plot(pts, val1, '-', label = "sample_approx likelihood", alpha = 0.5)
 plt.plot(pts, val2, '-', label = "truth", alpha = 0.5)
 plt.legend()
 plt.show()
+
+
+
+
+
+
+
+num_marginal_mc_pts = 1000
+approx_post = MarginalApproximatePosterior(posterior, gp, num_marginal_mc_pts)
+approx_post.approximate_forwardmap(ptset)
+approx_post.compute_norm_const(1000)
+approx_post.density(ptset)
+val1 = approx_post.density(pts)
+
+plt.figure()
+plt.plot(pts, val1, '-', label = "marg_approx forwardmap", alpha = 0.5)
+plt.plot(pts, val2, '-', label = "truth", alpha = 0.5)
+plt.legend()
+plt.show()
+
+approx_post = MarginalApproximatePosterior(posterior, gp, num_marginal_mc_pts)
+approx_post.approximate_potential(ptset)
+approx_post.compute_norm_const(1000)
+approx_post.density(ptset)
+val1 = approx_post.density(pts)
+plt.figure()
+plt.plot(pts, val1, '-', label = "marg_approx potential", alpha = 0.5)
+plt.plot(pts, val2, '-', label = "truth", alpha = 0.5)
+plt.legend()
+plt.show()
+
+
+
+
+
+
 
 
 print("\nAll seems good\n")

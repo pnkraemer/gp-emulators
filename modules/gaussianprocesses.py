@@ -28,7 +28,13 @@ class GaussianProcess:
     def sample(self, sample_locations):
         mean_vec = self.mean_fct.evaluate(sample_locations)
         cov_mtrx = self.cov_fct.evaluate(sample_locations, sample_locations)
-        return np.random.multivariate_normal(mean_vec.reshape([len(mean_vec),]), cov_mtrx)
+        return np.random.multivariate_normal(mean_vec.reshape([len(mean_vec),]), cov_mtrx, 1).T
+
+    def sample_many(self, sample_locations, num_samps):
+        mean_vec = self.mean_fct.evaluate(sample_locations)
+        cov_mtrx = self.cov_fct.evaluate(sample_locations, sample_locations)
+        return np.random.multivariate_normal(mean_vec.reshape([len(mean_vec),]), cov_mtrx, num_samps).T
+
 
 class StandardGP(GaussianProcess):
 
