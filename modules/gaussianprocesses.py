@@ -62,7 +62,8 @@ class ConditionedGaussianProcess(GaussianProcess):
         self.data = data
         cov_mtrx = GaussProc.cov_fct.evaluate(self.data.locations, self.data.locations, self.data.variance)
         self.cov_mtrx = cov_mtrx
-
+        self.prior = GaussProc
+        
         def new_mean_fct(loc, data = self.data, GP = GaussProc, cm = self.cov_mtrx):
             mean_vec_oldloc = GP.mean_fct.evaluate(data.locations)
             mean_vec_newloc = GP.mean_fct.evaluate(loc)

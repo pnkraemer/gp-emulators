@@ -37,6 +37,8 @@ An inverse problem is data together with a forward map
 """
 class InverseProblem(Data):
 
+    is_ip = True
+
     def __init__(self, locations, forward_map, variance = 0.):
         true_observations = forward_map(locations)
         self.forward_map = forward_map

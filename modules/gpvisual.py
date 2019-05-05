@@ -50,8 +50,8 @@ class GPVisual():
 
     def addplot_deviation(self, num_dev = 2):
         cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
-        pos_dev = self.mean_vec.T + 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
-        neg_dev = self.mean_vec.T - 2*num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
+        pos_dev = self.mean_vec.T + num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
+        neg_dev = self.mean_vec.T - num_dev*np.sqrt(np.abs(np.diag(cov_mtrx)))
         self.pos_dev = pos_dev.T
         self.neg_dev = neg_dev.T
         self.ax.fill_between(self.mesh[:,0], neg_dev[0,:], pos_dev[0,:], 
