@@ -43,8 +43,9 @@ class GPVisual():
 
 
     def addplot_truth(self):
+        self.truth =  self.gp.data.forward_map(self.mesh)
         assert(self.gp.is_conditioned==True), "Not a conditioned GP!"
-        self.ax.plot(self.mesh, self.gp.data.forward_map(self.mesh) , color = "darkred", linestyle = "dashed", linewidth = 2, 
+        self.ax.plot(self.mesh, self.truth, color = "darkred", linestyle = "dashed", linewidth = 2, 
                      label = "True function")
 
 
