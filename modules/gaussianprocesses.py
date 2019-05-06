@@ -69,7 +69,7 @@ class ConditionedGaussianProcess(GaussianProcess):
             mean_vec_newloc = GP.mean_fct.evaluate(loc)
             cov_mtrx = GP.cov_fct.evaluate(loc, data.locations)
             obs2 = data.observations - mean_vec_oldloc
-            lu, piv = scipy.linalg.lu_factor(cm)
+            (lu, piv) = scipy.linalg.lu_factor(cm)
             coeff = scipy.linalg.lu_solve((lu, piv), obs2)
 #            coeff = np.linalg.solve(cm, obs2)
             return mean_vec_newloc + cov_mtrx.dot(coeff)
@@ -78,7 +78,7 @@ class ConditionedGaussianProcess(GaussianProcess):
             cov_mtrx_new = GP.cov_fct.evaluate(loc1, loc2)
             cov_mtrx_new2 = GP.cov_fct.evaluate(loc1, data.locations)
             cov_mtrx_new3 = GP.cov_fct.evaluate(data.locations, loc2)
-            lu, piv = scipy.linalg.lu_factor(cm)
+            (lu, piv) = scipy.linalg.lu_factor(cm)
             coeff = scipy.linalg.lu_solve((lu, piv), cov_mtrx_new3)
 #            coeff = np.linalg.solve(cm, cov_mtrx_new3)
             return cov_mtrx_new - cov_mtrx_new2.dot(coeff)

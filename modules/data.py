@@ -14,7 +14,7 @@ import scipy.sparse.linalg
 
 class Data():
 
-    def __init__(self, locations, true_observations, variance = 0.001):
+    def __init__(self, locations, true_observations, variance = 0.):
 
         def make_noisy(true_observations):
 
@@ -24,6 +24,7 @@ class Data():
                 num_obs = len(true_observations)
                 for i in range(num_obs):
                     noise = np.sqrt(variance) * np.random.randn(1, dim_obs)
+#                    noise = (variance) * np.random.randn(1, dim_obs)
                     noisy_observations[i,:] = noisy_observations[i,:] + noise
             return noisy_observations
 

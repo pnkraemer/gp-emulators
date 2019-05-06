@@ -58,7 +58,7 @@ class GPVisual():
                              facecolor = self.color, linewidth = 1, linestyle = "-", 
                              alpha = 0.3, label = "Confidence interval")
 
-    def addplot_fancy_deviation(self, num_dev = 3):
+    def addplot_fancy_deviation(self, num_dev = 2):
         cov_mtrx = self.gp.cov_fct.evaluate(self.mesh, self.mesh)
         num_shades = 50
         shade = 1.0/num_shades
