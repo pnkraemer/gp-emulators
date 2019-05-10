@@ -1,0 +1,385 @@
+========================================================================================
+512	 	55
+========================================================================================
+
+H2-MVM discrepancy:
+        discr = 1.2e-14 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 11 (long: 56, maxit 1000)(full matrix and precon: 11)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 6.6e-09
+
+
+Memory footprints:
+        full    = 2.03 MB
+        H2      = 2.37 MB
+        sparse  = 0.32 MB
+
+Stopwatch allocation:
+        full    = 0.00 s
+        H2      = 0.00 s
+        sparse  = 0.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 0.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 1.00 s
+        ergo:   ~ 1.00 s for all the other stuff
+
+
+real    0m0.745s
+user    0m4.415s
+sys     0m9.855s
+
+
+========================================================================================
+1024	 	67
+========================================================================================
+H2-MVM discrepancy:
+        discr = 2.4e-13 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 8 (long: 40, maxit 1000)(full matrix and precon: 8)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 1.3e-09
+
+
+Memory footprints:
+        full    = 8.06 MB
+        H2      = 8.94 MB
+        sparse  = 0.79 MB
+
+Stopwatch allocation:
+        full    = 0.00 s
+        H2      = 1.00 s
+        sparse  = 0.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 0.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 2.00 s
+        ergo:   ~ 1.00 s for all the other stuff
+
+
+real    0m2.000s
+user    0m11.689s
+sys     0m25.810s
+
+
+========================================================================================
+2048	 	80
+========================================================================================
+H2-MVM discrepancy:
+        discr = 3.8e-13 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 10 (long: 42, maxit 1000)(full matrix and precon: 10)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 9.0e-09
+
+
+Memory footprints:
+        full    = 32.13 MB
+        H2      = 32.41 MB
+        sparse  = 1.88 MB
+
+Stopwatch allocation:
+        full    = 1.00 s
+        H2      = 2.00 s
+        sparse  = 1.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 1.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 7.00 s
+        ergo:   ~ 2.00 s for all the other stuff
+
+
+real    0m6.741s
+user    0m44.497s
+sys     1m30.067s
+
+
+========================================================================================
+4096	 	95
+========================================================================================
+H2-MVM discrepancy:
+        discr = 5.6e-13 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 7 (long: 35, maxit 1000)(full matrix and precon: 7)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 5.2e-10
+
+
+Memory footprints:
+        full    = 128.25 MB
+        H2      = 88.25 MB
+        sparse  = 4.47 MB
+
+Stopwatch allocation:
+        full    = 2.00 s
+        H2      = 14.00 s
+        sparse  = 2.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 0.00 s
+        noprec  = 1.00 s (full)
+
+Stopwatch all the rest:
+        all     = 25.00 s
+        ergo:   ~ 7.00 s for all the other stuff
+
+
+real    0m24.652s
+user    3m38.774s
+sys     6m23.358s
+
+
+========================================================================================
+8192	 	111
+========================================================================================
+H2-MVM discrepancy:
+        discr = 7.3e-13 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 11 (long: 28, maxit 1000)(full matrix and precon: 11)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 4.8e-09
+
+
+Memory footprints:
+        full    = 512.50 MB
+        H2      = 210.43 MB
+        sparse  = 10.44 MB
+
+Stopwatch allocation:
+        full    = 8.00 s
+        H2      = 63.00 s
+        sparse  = 6.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 1.00 s
+        noprec  = 1.00 s (full)
+
+Stopwatch all the rest:
+        all     = 95.00 s
+        ergo:   ~ 17.00 s for all the other stuff
+
+
+real    1m34.420s
+user    16m39.862s
+sys     26m29.540s
+
+
+========================================================================================
+16384	 	128
+========================================================================================
+H2-MVM discrepancy:
+        discr = 9.5e-13 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 12 (full matrix and precon: 12)(discard the timing for nonprecon gmres below!)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 3.9e-09
+
+
+Memory footprints:
+        full    = 2049.00 MB
+        H2      = 472.90 MB
+        sparse  = 24.06 MB
+
+Stopwatch allocation:
+        full    = 35.00 s
+        H2      = 281.00 s
+        sparse  = 68.00 s
+
+Stopwatch gmres:
+        full    = 1.00 s
+        H2      = 2.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 475.00 s
+        ergo:   ~ 88.00 s for all the other stuff
+
+
+real    7m55.089s
+user    79m10.877s
+sys     113m4.432s
+
+
+========================================================================================
+32768	 	146
+========================================================================================
+
+H2-MVM discrepancy:
+        discr = 1.3e-12 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 8 (full matrix and precon: 8)(discard the timing for nonprecon gmres below!)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 3.3e-09
+
+
+Memory footprints:
+        full    = 8194.00 MB
+        H2      = 1015.51 MB
+        sparse  = 54.88 MB
+
+Stopwatch allocation:
+        full    = 141.00 s
+        H2      = 1249.00 s
+        sparse  = 78.00 s
+
+Stopwatch gmres:
+        full    = 3.00 s
+        H2      = 3.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 1594.00 s
+        ergo:   ~ 120.00 s for all the other stuff
+
+
+real    26m34.918s
+user    333m27.207s
+sys     476m15.963s
+
+
+========================================================================================
+65536	 	166
+========================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+========================================================================================
+131072	 	187
+========================================================================================
+H2-MVM discrepancy:
+        discr = 3.3e-12 (truncacc: 1.0e-12)
+
+Number of GMRES iterations with H2 matrix and sparse preconditioner:
+        #It = 8 (full matrix and precon: 0)(discard the timing for nonprecon gmres below!)
+
+
+RMSE of interpolation with H2 matrix and sparse preconditioner:
+        RMSE =: 1.4e-09
+
+
+Memory footprints:
+        full    = 131080.00 MB
+        H2      = 4610.86 MB
+        sparse  = 281.00 MB
+
+Stopwatch allocation:
+        full    = 4944.00 s
+        H2      = 25753.00 s
+        sparse  = 1534.00 s
+
+Stopwatch gmres:
+        full    = 0.00 s
+        H2      = 13.00 s
+        noprec  = 0.00 s (full)
+
+Stopwatch all the rest:
+        all     = 34149.00 s
+        ergo:   ~ 1905.00 s for all the other stuff
+
+
+real    569m8.888s
+user    5886m15.172s
+sys     7929m50.210s
+

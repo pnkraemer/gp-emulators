@@ -116,7 +116,6 @@ class Lattice():
 
         gen_vec = load_gen_vec(path, dim)
         lattice = np.zeros((num_pts, dim))
-
         if rand_shift == True:
             shift = np.random.rand(dim)
             for i in range(num_pts):

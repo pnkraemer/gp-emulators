@@ -38,4 +38,3 @@ halton2 = Halton.construct(200, 2)
 assert(len(halton) == len(halton2))
 print("successful!")
 
-
