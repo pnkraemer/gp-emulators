@@ -96,3 +96,56 @@ class MaternCov(Covariance):
             return matern_cov(cov_mtrx)
 
 
+class TPSSphere(Covariance):
+
+    def __init__(self):
+
+        def tps_cov(pointset1, pointset2):
+            kmat = 0.5*scipy.spatial.distance_matrix(ptset1, ptset2)**2
+            kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+            polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+            kmat2 = np.concatenate((kmat, polblock), axis = 0)
+            polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+            polblock2 = np.concatenate((polblock1, np.zeros((4,4))), axis = 0)
+            return np.concatenate((kmat2, polblock2), axis = 1)
+
+        Covariance.__init__(self, tps_cov)
+
+    @staticmethod
+    def fast_mtrx(ptset1, ptset2):
+        kmat = 0.5*scipy.spatial.distance_matrix(ptset1, ptset2)**2
+        kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+        polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+        kmat2 = np.concatenate((kmat, polblock), axis = 0)
+        polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+        polblock2 = np.concatenate((polblock1, np.zeros((4,4))), axis = 0)
+        return np.concatenate((kmat2, polblock2), axis = 1)
+
+
+
+class TPS(Covariance):
+
+    def __init__(self):
+
+        def tps_cov(pointset1, pointset2):
+            kmat = scipy.spatial.distance_matrix(ptset1, ptset2)
+            kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+            polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+            kmat2 = np.concatenate((kmat, polblock), axis = 0)
+            polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+            polblock2 = np.concatenate((polblock1, np.zeros((3,3))), axis = 0)
+            return np.concatenate((kmat2, polblock2), axis = 1)
+
+        Covariance.__init__(self, tps_cov)
+
+    @staticmethod
+    def fast_mtrx(ptset1, ptset2):
+        kmat = scipy.spatial.distance_matrix(ptset1, ptset2)
+        kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+        polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+        kmat2 = np.concatenate((kmat, polblock), axis = 0)
+        polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+        polblock2 = np.concatenate((polblock1, np.zeros((3,3))), axis = 0)
+        return np.concatenate((kmat2, polblock2), axis = 1)
+
+

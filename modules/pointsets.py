@@ -103,6 +103,30 @@ class Halton():
 """
 Lattice rules, see Frances Kuo's website for generating vectors
 """
+class FibonacciSphere():
+
+    # path is a string to the .txt file
+    @staticmethod
+    def construct(num_pts, rand_shift = True):
+        rnd = 1.0
+        if rand_shift:
+            rnd = np.random.rand() * num_pts
+        points = []
+        offset = 2.0/num_pts
+        increment = np.pi * (3.0 - np.sqrt(5.0));
+        for idx in range(num_pts):
+            y = ((idx * offset) - 1) + (offset / 2);
+            r = np.sqrt(1 - y**2)
+            phi = ((idx + rnd) % num_pts) * increment
+            x = np.cos(phi) * r
+            z = np.sin(phi) * r
+            points.append([x,y,z])
+        return np.array(points)
+
+
+"""
+Lattice rules, see Frances Kuo's website for generating vectors
+"""
 class Lattice():
 
     # path is a string to the .txt file
