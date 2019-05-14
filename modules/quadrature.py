@@ -50,10 +50,26 @@ class MonteCarlo(Quadrature):
         nodes = Random.construct(num_pts, dim)
         #nodes = np.random.rand(num_pts, dim)
         values = integrand(nodes)
-        return np.sum(values)/(1.0 *num_pts)
+        return np.sum(values, axis = 0)/(1.0 *num_pts)
 
 
+"""
+Monte Carlo quadrature
+"""
+class QuasiMonteCarlo(Quadrature):
 
+    def __init__(self, num_pts, dim):
+        nodes = Lattice.construct(num_pts, dim)
+        weights = np.ones(num_pts)/(1.0*num_pts) 
+        Quadrature.__init__(self, random_nodes, weights)
+
+    @staticmethod
+    def compute_integral(integrand, num_pts, dim):
+        nodes = Lattice.construct(num_pts, dim, rand_shift = True)
+        #nodes = np.random.rand(num_pts, dim)
+        values = integrand(nodes)
+        summ = np.sum(values, axis = 0)/(1.0 *num_pts)
+        return summ.reshape((1, len(summ)))
 
 
 

@@ -1,7 +1,9 @@
 # gp-emulators
 
-This is a collection of some of the python programs surrounding the usage of Gaussian process emulators in Bayesian inverse problems.
+This is a collection of some of the python programs surrounding the usage of Gaussian process emulators in Bayesian inverse problems as part of my MSc thesis at the University of Bonn.
 
-I am planning to include: (Q)MC algorithms, finite element methods, covariance matrices, Gaussian processes, various visualisations. Most of them are based on numpy, scipy and matplotlib.
+As of May 13, 2019, it includes: (Q)MC and MCMC algorithms, finite element methods, various covariance matrices, Gaussian processes and Gaussian process regression, various visualisations, Bayesian inference and approximate Bayesian inference with Gaussian process emulators, localised Lagrange bases preconditioners. Most of them are based on numpy, scipy and matplotlib.
 
-Little by little I refactor the code. I follow the PEP8 style guide-at least, I try to.
+I intend to follow the PEP8 style guide. For most of the modules, I include unittests. 
+
+Please let me know about any bugs, issues or inefficiencies. I will be happy to discuss potential extensions.

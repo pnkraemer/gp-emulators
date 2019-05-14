@@ -5,7 +5,7 @@ AUTHOR: data class, noisy observations on locations
 
 NOTE: We only consider additive Gaussian noise
 """
-
+import sys
 import numpy as np
 from pointsets import Random, Mesh1d
 from scipy import interpolate
@@ -14,7 +14,7 @@ import scipy.sparse.linalg
 
 class Data():
 
-    def __init__(self, locations, true_observations, variance = 0.001):
+    def __init__(self, locations, true_observations, variance = 0.):
 
         def make_noisy(true_observations):
 
@@ -24,6 +24,7 @@ class Data():
                 num_obs = len(true_observations)
                 for i in range(num_obs):
                     noise = np.sqrt(variance) * np.random.randn(1, dim_obs)
+#                    noise = (variance) * np.random.randn(1, dim_obs)
                     noisy_observations[i,:] = noisy_observations[i,:] + noise
             return noisy_observations
 
@@ -36,6 +37,8 @@ class Data():
 An inverse problem is data together with a forward map
 """
 class InverseProblem(Data):
+
+    is_ip = True
 
     def __init__(self, locations, forward_map, variance = 0.):
         true_observations = forward_map(locations)
@@ -61,10 +64,10 @@ class ToyInverseProblem1d(InverseProblem):
             dim = len(points.T)
             assert(dim==1), "Forward map is 1D, pointset is not"
 
-            observations = np.zeros((num_pts, 1))
-            for i in range(num_pts):
-                observations[i, 0] = sine(points[i, 0])
-            return observations * np.ones(num_pts)
+#           observations = np.zeros((num_pts, 1))
+#           for i in range(num_pts):
+#               observations[i, 0] = sine(points[i, 0])
+            return sine(points).reshape((num_pts, 1)) 
 
         pointset = Random.construct(num_pts, 1)
         InverseProblem.__init__(self, pointset, forward_map, variance)
@@ -89,10 +92,10 @@ class ToyGPData1d(InverseProblem):
             dim = len(points.T)
             assert(dim==1), "Forward map is 1D, pointset is not"
 
-            observations = np.zeros((num_pts, 1))
-            for i in range(num_pts):
-                observations[i, 0] = exp_sine(points[i, 0])
-            return observations
+#            observations = np.zeros((num_pts, 1))
+#            for i in range(num_pts):
+#                observations[i, 0] = exp_sine(points[i, 0])
+            return exp_sine(points).reshape((num_pts, 1))
 
         pointset = Mesh1d.construct(num_pts)
         pointset = pointset*0.6 + 0.01
@@ -105,8 +108,8 @@ FEM IP
 class FEMInverseProblem(InverseProblem):
 
     """
-    solves -(alpha(x,u) u'(x,a))' = 1 
-    for alpha(x,u) = 0.1 * sum_{i=1}^K e^(a_i*x)
+    solves -(alpha(x,a) u'(x,a))' = 1 
+    for alpha(x,a) = 1 + 0.1 * sum_{i=1}^K sin(a_i*x)
     """
     def __init__(self, input_dim = 1, eval_pts = np.random.rand(1,1), meshwidth = 1./32., variance = 0.001):
         
@@ -116,12 +119,11 @@ class FEMInverseProblem(InverseProblem):
 
             def compIntExp(coeff, lowerBd, upperBd):
                 intSum = 0
+                coeff = coeff[0]
                 for idx in range(len(coeff)):
                     if coeff[idx] > 0:
-                        intSum = intSum + (np.exp(coeff[idx]*upperBd)-np.exp(coeff[idx]*lowerBd))/coeff[idx]
-                    else:
-                        intSum = intSum + upperBd - lowerBd
-                return 0.1 * intSum
+                        intSum = intSum + (np.cos(coeff[idx]*lowerBd)-np.cos(coeff[idx]*upperBd))/coeff[idx]
+                return (upperBd - lowerBd) * 1.0 + 0.1 * intSum
 
             numNodes = int(1.0/meshwidth) + 1
             numIntNodes = numNodes - 2  
@@ -146,11 +148,20 @@ class FEMInverseProblem(InverseProblem):
 
             nodes =  np.linspace(0,1,numNodes)
             solFct = interpolate.interp1d(nodes, solCoeffWithBdry)
-            return solFct(obsPtSet)
+            return solFct(obsPtSet).reshape((1, len(obsPtSet)))
+        
+        def forward_map(locations):
+            evaluations = np.zeros((len(locations), 1))
+            for i in range(len(locations)):
+                evaluations[i,0] = forward_map_fem(locations[i,:].reshape((1,len(locations.T))))
+            return evaluations
 
-        true_input = Random.construct(input_dim, 1)
 
-        InverseProblem.__init__(self, true_input, forward_map_fem, variance)
+
+
+        true_input = Random.construct(1, input_dim)
+
+        InverseProblem.__init__(self, true_input, forward_map, variance)
 
 
 

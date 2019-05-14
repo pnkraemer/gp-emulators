@@ -17,9 +17,11 @@ class Covariance:
     def evaluate(self, pointset1, pointset2, shift = 0.):
         cov_mtrx = self.cov_fct(pointset1, pointset2)
         if shift > 0:
-            assert(np.array_equal(points1, points2) == 1), "Shift inappropriate for different pointsets"
-            cov_mtrx = cov_mtrx + shift * np.identity(len(points1))
-        return cov_mtrx
+            if np.array_equal(pointset1, pointset2) == 1:#, "Shifting inappropriate for different pointsets"
+                return cov_mtrx + shift * np.identity(len(pointset1))
+        else:
+            return cov_mtrx
+
 
 
 
@@ -92,5 +94,58 @@ class MaternCov(Covariance):
 
             cov_mtrx = scipy.spatial.distance_matrix(pointset1, pointset2)
             return matern_cov(cov_mtrx)
+
+
+class TPSSphere(Covariance):
+
+    def __init__(self):
+
+        def tps_cov(pointset1, pointset2):
+            kmat = 0.5*scipy.spatial.distance_matrix(ptset1, ptset2)**2
+            kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+            polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+            kmat2 = np.concatenate((kmat, polblock), axis = 0)
+            polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+            polblock2 = np.concatenate((polblock1, np.zeros((4,4))), axis = 0)
+            return np.concatenate((kmat2, polblock2), axis = 1)
+
+        Covariance.__init__(self, tps_cov)
+
+    @staticmethod
+    def fast_mtrx(ptset1, ptset2):
+        kmat = 0.5*scipy.spatial.distance_matrix(ptset1, ptset2)**2
+        kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+        polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+        kmat2 = np.concatenate((kmat, polblock), axis = 0)
+        polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+        polblock2 = np.concatenate((polblock1, np.zeros((4,4))), axis = 0)
+        return np.concatenate((kmat2, polblock2), axis = 1)
+
+
+
+class TPS(Covariance):
+
+    def __init__(self):
+
+        def tps_cov(pointset1, pointset2):
+            kmat = scipy.spatial.distance_matrix(ptset1, ptset2)
+            kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+            polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+            kmat2 = np.concatenate((kmat, polblock), axis = 0)
+            polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+            polblock2 = np.concatenate((polblock1, np.zeros((3,3))), axis = 0)
+            return np.concatenate((kmat2, polblock2), axis = 1)
+
+        Covariance.__init__(self, tps_cov)
+
+    @staticmethod
+    def fast_mtrx(ptset1, ptset2):
+        kmat = scipy.spatial.distance_matrix(ptset1, ptset2)
+        kmat = kmat * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
+        polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
+        kmat2 = np.concatenate((kmat, polblock), axis = 0)
+        polblock1 = np.concatenate((np.ones((len(ptset1), 1)), ptset1), axis = 1)
+        polblock2 = np.concatenate((polblock1, np.zeros((3,3))), axis = 0)
+        return np.concatenate((kmat2, polblock2), axis = 1)
 
 

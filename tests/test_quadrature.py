@@ -50,5 +50,7 @@ qmc_direct_residual = np.linalg.norm(qmc_direct_integral - 123. / 3.0)
 print("\tResidual: %.1e"%(qmc_direct_residual), "(roughly %.1e?)"%(1.0/(1.0*num_pts)))
 print("\t\t(Difference: %.1e"%(np.linalg.norm(qmc_direct_integral-qmc_integral)), "(=0?))")
 
+
+
 print("\nAll seems good \n")
 

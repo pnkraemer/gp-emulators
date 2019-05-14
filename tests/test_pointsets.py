@@ -18,6 +18,8 @@ assert(mesh1d.shape==lattice.shape)
 assert(random.shape==lattice.shape)
 assert(random.shape==(num_pts, dim))
 print("successful!")
+halton = Halton.construct(num_pts, dim)
+assert(halton.shape==(num_pts, dim))
 
 """
 Check 5d
@@ -28,5 +30,11 @@ random = Random.construct(num_pts, dim)
 lattice = Lattice.construct(num_pts, dim)
 assert(random.shape==lattice.shape)
 assert(random.shape==(num_pts, dim))
+print("successful!")
+
+print("\nCheck Halton...", end = "")
+halton = Halton.construct_withzero(200, 2)
+halton2 = Halton.construct(200, 2)
+assert(len(halton) == len(halton2))
 print("successful!")
 

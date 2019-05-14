@@ -1,0 +1,9 @@
+time python3 test_covariances.py
+time python3 test_data.py
+time python3 test_distances.py
+time python3 test_gaussianprocesses.py
+time python3 test_gpvisual.py
+time python3 test_means.py
+time python3 test_pointsets.py
+time python3 test_posterior.py
+time python3 test_quadrature.py
