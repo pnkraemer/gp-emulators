@@ -17,7 +17,7 @@ from covariances import *
 
 save_txt = True
 
-num_pts = 256 
+num_pts = 8 
 loc_radius = 7.0
 dim = 2
 

@@ -6,7 +6,7 @@ from pointsets import *
 num_pts = 250
 dim = 1
 
-ptset = Lattice.construct(num_pts, dim)
+ptset = Random.construct(num_pts, dim)
 
 print("\nChecking discrepancy of static methods:")
 gauss_cov = GaussCov()

@@ -12,7 +12,7 @@ from gaussianprocesses import *
 
 class GPVisual():
 
-    def __init__(self, GaussProc, ctheme = "darkslategray", num_pts = 200, 
+    def __init__(self, GaussProc, ctheme = "darkslategray", bgroundtheme = "white", num_pts = 200, 
                  xlim = [0,1], title = "", naked = False):
         plt.style.use("ggplot")
         plt.rcParams["figure.figsize"] = [10,5]
@@ -26,6 +26,7 @@ class GPVisual():
             plt.rcParams["axes.facecolor"] = "white"
         figure = plt.figure()
         axis = plt.axes()
+        axis.set_facecolor(bgroundtheme)
         plt.title(title, color = "black", alpha = 0.6)
         plt.xlim(xlim)
         plt.grid(True)
@@ -111,8 +112,8 @@ class GPVisual():
 
 
 class NakedGPVisual(GPVisual):
-    def __init__(self, GaussProc, ctheme = "darkslategray", num_pts = 200, xlim = [0,1], title = ""):
-        GPVisual.__init__(self, GaussProc, ctheme = ctheme, num_pts = 200, xlim = [0,1], 
+    def __init__(self, GaussProc, ctheme = "darkslategray", bgroundtheme = "white", num_pts = 200, xlim = [0,1], title = ""):
+        GPVisual.__init__(self, GaussProc, ctheme = ctheme, bgroundtheme = bgroundtheme, num_pts = 200, xlim = [0,1], 
                           title = "", naked = True)
         plt.grid(False)
         plt.gca().spines['right'].set_visible(False)
