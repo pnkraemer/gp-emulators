@@ -22,8 +22,8 @@ loc_radius = 12
 dim = 2
 
 # 21, 65, 225, 833, 3201, ...
-num_pts = 3201
-ptset = np.loadtxt("/home/kraemer/Programmieren/H2Lib/lshape/files/mesh/lmesh_N%u.txt"%num_pts)
+num_pts = 21
+ptset = np.loadtxt("./../../H2Lib/lshape/files/mesh/lmesh_N%u.txt"%num_pts)
 
 
 
@@ -48,9 +48,9 @@ print('Memory footprint of full matrix:\n\t %.1f MB'%((precon.toarray()).nbytes/
 if save_txt == True:
 	print('Saving')
 #	np.savetxt("precon_txt_tps_square/ptSet_Halton_N%d_n%d.txt"%(num_pts, num_neighb), ptset, fmt='%.17e')
-	np.savetxt("/home/kraemer/Programmieren/H2Lib/lshape/files/precon/precon_val_N%d_n%d.txt"%(num_pts, num_neighb), precon_vals, fmt='%.17e')
-	np.savetxt("/home/kraemer/Programmieren/H2Lib/lshape/files/precon/precon_row_N%d_n%d.txt"%(num_pts, num_neighb), precon_rowidx, fmt='%d')
-	np.savetxt("/home/kraemer/Programmieren/H2Lib/lshape/files/precon/precon_col_N%d_n%d.txt"%(num_pts, num_neighb), precon_colidx, fmt='%d')
+	np.savetxt("./../../H2Lib/lshape/files/precon/precon_val_N%d_n%d.txt"%(num_pts, num_neighb), precon_vals, fmt='%.17e')
+	np.savetxt("./../../H2Lib/lshape/files/precon/precon_row_N%d_n%d.txt"%(num_pts, num_neighb), precon_rowidx, fmt='%d')
+	np.savetxt("./../../H2Lib/lshape/files/precon/precon_col_N%d_n%d.txt"%(num_pts, num_neighb), precon_colidx, fmt='%d')
 	print('\tcomplete')
 print()
 
