@@ -18,8 +18,9 @@ class gmresCounter(object):
 
 class LocalLagrange:
 
+	# depreciated
 	@staticmethod
-	def precon(ptSet, radius, kernelMtrxFct, polBlockSize):
+	def precon_alt(ptSet, radius, kernelMtrxFct, polBlockSize):
 
 		tree = scipy.spatial.KDTree(ptSet)
 		numPts = len(ptSet)
@@ -44,7 +45,7 @@ class LocalLagrange:
 
 
 	@staticmethod
-	def precon2(ptSet, radius, kernelMtrxFct, polBlockSize):
+	def precon(ptSet, radius, kernelMtrxFct, polBlockSize):
 
 		tree = scipy.spatial.KDTree(ptSet)
 		numPts = len(ptSet)
@@ -69,6 +70,7 @@ class LocalLagrange:
 			preconColIdx[idx*k2:(idx+1)*k2] = idx
 		return preconVals, preconRowIdx, preconColIdx, k2
 
+"""
 	@staticmethod
 	def localco(idx, tree, numPts, numNeighb, k2, distneighb, indneighb, ptSet, kernelMtrxFct, polBlockSize):
 		retu = np.ones((k2, 3))
@@ -104,5 +106,5 @@ class LocalLagrange:
 		Ret = Parallel(n_jobs=num_cores, backend = "multiprocessing")(delayed(LocalLagrange.localco)(i, tree, numPts, numNeighb, k2, distneighb, indneighb, ptSet, kernelMtrxFct, polBlockSize) for i in range(numPts))
 		retu = np.vstack(Ret)
 		return retu[:,0], retu[:,1], retu[:,2], k2
-
+"""
 

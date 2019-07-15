@@ -41,9 +41,8 @@ def localco(idx):
 	locRhs = np.zeros(len(locKernelMtrx))
 	locRhs[0] = 1
 #	locCoeff = locRhs
-	for i in range(1):
-		lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
-		locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
+	lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
+	locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
 	retu[:,0] = locCoeff #val
 	retu[:numNeighb, 1] = indNeighb #row
 	retu[numNeighb:, 1] = numPts + np.arange(polBlockSize) #row
@@ -94,7 +93,7 @@ if __name__ == '__main__':
 
 	save_txt = False
 
-	loc_radius = 12
+	loc_radius = 30
 	dim = 2
 
 	# 21, 65, 225, 833, 3201, ...
@@ -139,9 +138,10 @@ if __name__ == '__main__':
 	precon_colidx = retu[:,2]
 	num_neighb = k2
 	print("Number of cores:", num_cores)
+	print('\nInitialising\n\tN = %d\n\tn = %d'%(num_pts, num_neighb))
 
 
-
+	sys.exit()
 
 
 	precon = scipy.sparse.coo_matrix((precon_vals, (precon_rowidx, precon_colidx)), shape=(num_pts + polblocksize, num_pts + polblocksize))
