@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "../modules")
+sys.path.insert(0, "../")
 
 from gpvisual import *
 from gaussianprocesses import *
