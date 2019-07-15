@@ -141,6 +141,7 @@ class TPS(Covariance):
     @staticmethod
     def fast_mtrx(ptset1, ptset2):
         kmat = scipy.spatial.distance_matrix(ptset1, ptset2)
+#        kmat = kmat**2  * np.log(kmat + np.finfo(float).eps)
         kmat = kmat**2  * np.log(kmat + np.eye(len(ptset1), len(ptset2)))
         polblock = np.concatenate((np.ones((1, len(ptset2))), ptset2.T), axis = 0)
         kmat2 = np.concatenate((kmat, polblock), axis = 0)

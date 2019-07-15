@@ -31,7 +31,7 @@ cov_fct = TPS.fast_mtrx
 polblocksize = 1 + dim
 
 
-precon_vals, precon_rowidx, precon_colidx, num_neighb = LocalLagrange.precon(ptset, loc_radius, cov_fct, polblocksize)
+precon_vals, precon_rowidx, precon_colidx, num_neighb = LocalLagrange.precon_alt(ptset, loc_radius, cov_fct, polblocksize)
 
 precon = scipy.sparse.coo_matrix((precon_vals, (precon_rowidx, precon_colidx)), shape=(num_pts + polblocksize, num_pts + polblocksize))
 

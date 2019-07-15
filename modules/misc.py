@@ -21,7 +21,6 @@ class LocalLagrange:
 	# depreciated
 	@staticmethod
 	def precon_alt(ptSet, radius, kernelMtrxFct, polBlockSize):
-
 		tree = scipy.spatial.KDTree(ptSet)
 		numPts = len(ptSet)
 		numNeighb = 1.0 * radius * np.log10(numPts) * np.log10(numPts)
@@ -32,21 +31,20 @@ class LocalLagrange:
 		preconColIdx = np.zeros(k2 * numPts)
 		for idx in range(numPts):
 			distNeighb, indNeighb = tree.query(ptSet[idx,:], k = numNeighb)
-			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb], ptSet[indNeighb])
+			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb,:], ptSet[indNeighb,:])
 			locRhs = np.zeros(len(locKernelMtrx))
 			locRhs[0] = 1
 			lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
 			locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
-			preconVals[idx*k2:(idx+1)*k2] = locCoeff
-			preconRowIdx[idx*k2:(idx*k2 + numNeighb)] = indNeighb
-			preconRowIdx[(idx*k2 + numNeighb):(idx+1)*k2] = numPts + np.arange(polBlockSize)
-			preconColIdx[idx*k2:(idx+1)*k2] = idx
+			preconVals[idx*k2:(idx+1)*k2] = np.copy(locCoeff)
+			preconRowIdx[idx*k2:(idx*k2 + numNeighb)] = np.copy(indNeighb)
+			preconRowIdx[(idx*k2 + numNeighb):(idx+1)*k2] = np.copy(numPts + np.arange(polBlockSize))
+			preconColIdx[idx*k2:(idx+1)*k2] = np.copy(idx * np.ones(k2))
 		return preconVals, preconRowIdx, preconColIdx, k2
 
 
 	@staticmethod
 	def precon(ptSet, radius, kernelMtrxFct, polBlockSize):
-
 		tree = scipy.spatial.KDTree(ptSet)
 		numPts = len(ptSet)
 		numNeighb = 1.0 * radius * np.log10(numPts) * np.log10(numPts)
@@ -57,19 +55,49 @@ class LocalLagrange:
 		preconColIdx = np.zeros(k2 * numPts)
 		distneighb, indneighb = tree.query(ptSet, k = numNeighb)
 		for idx in range(numPts):
+#			distNeighb, indNeighb = tree.query(ptSet[idx,:], k = numNeighb)
 			distNeighb = distneighb[idx,:]
 			indNeighb = indneighb[idx,:]
-			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb], ptSet[indNeighb])
+			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb,:], ptSet[indNeighb,:])
 			locRhs = np.zeros(len(locKernelMtrx))
 			locRhs[0] = 1
 			lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
 			locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
-			preconVals[idx*k2:(idx+1)*k2] = locCoeff
-			preconRowIdx[idx*k2:(idx*k2 + numNeighb)] = indNeighb
-			preconRowIdx[(idx*k2 + numNeighb):(idx+1)*k2] = numPts + np.arange(polBlockSize)
-			preconColIdx[idx*k2:(idx+1)*k2] = idx
+			preconVals[idx*k2:(idx+1)*k2] = np.copy(locCoeff)
+			preconRowIdx[idx*k2:(idx*k2 + numNeighb)] = np.copy(indNeighb)
+			preconRowIdx[(idx*k2 + numNeighb):(idx+1)*k2] = np.copy(numPts + np.arange(polBlockSize))
+			preconColIdx[idx*k2:(idx+1)*k2] = np.copy(idx * np.ones(k2))
 		return preconVals, preconRowIdx, preconColIdx, k2
 
+
+
+"""
+	@staticmethod
+	def precon(ptSet, radius, kernelMtrxFct, polBlockSize):
+		tree = scipy.spatial.KDTree(ptSet)
+		numPts = len(ptSet)
+		numNeighb = 1.0 * radius * np.log10(numPts) * np.log10(numPts)
+		numNeighb = int(np.minimum(np.floor(numNeighb), numPts))
+		k2 = numNeighb + polBlockSize
+		preconVals = np.zeros(k2 * numPts)
+		preconRowIdx = np.zeros(k2 * numPts)
+		preconColIdx = np.zeros(k2 * numPts)
+#		distneighb, indneighb = tree.query(ptSet, k = numNeighb)
+		for idx in range(numPts):
+			distNeighb, indNeighb = tree.query(ptSet[idx,:], k = numNeighb)
+#			distNeighb = distneighb[idx,:]
+#			indNeighb = indneighb[idx,:]
+			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb,:], ptSet[indNeighb,:])
+			locRhs = np.zeros(len(locKernelMtrx))
+			locRhs[0] = 1
+			lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
+			locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
+			preconVals[idx*k2:(idx+1)*k2] = np.copy(locCoeff)
+			preconRowIdx[idx*k2:(idx*k2 + numNeighb)] = np.copy(indNeighb)
+			preconRowIdx[(idx*k2 + numNeighb):(idx+1)*k2] = np.copy(numPts + np.arange(polBlockSize))
+			preconColIdx[idx*k2:(idx+1)*k2] = np.copy(idx * np.ones(k2))
+		return preconVals, preconRowIdx, preconColIdx, k2
+"""
 """
 	@staticmethod
 	def localco(idx, tree, numPts, numNeighb, k2, distneighb, indneighb, ptSet, kernelMtrxFct, polBlockSize):
