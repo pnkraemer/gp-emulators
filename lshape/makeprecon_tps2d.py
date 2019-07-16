@@ -8,6 +8,10 @@ python3 script.py num_pts <path_to_precon_and_mesh_folder>, e.g.:
 
 python3 makeprecon_tps2d.py /home/kraemer/Programmieren/txts/uniform_lshape/ 225
 
+or, even better:
+
+bash precon_demlow.sh /home/kraemer/Programmieren/txts/demlow/
+
 21, 65, 225, 833, 3201, 12545, 49665, 197633, respectively
 129, 1025, 3350, 10565, 97829
 """
@@ -32,44 +36,10 @@ path_to_mesh = sys.argv[1] + "mesh/mesh_N%u.txt"%num_pts
 path_to_precon = sys.argv[1]
 ptset = np.loadtxt(path_to_mesh)
 
-"""
-tree = scipy.spatial.KDTree(ptset)
-distneighb1, indneighb1 = tree.query(ptset, k = 20)
-
-
-normm = 0
-for i in range(len(ptset)):
-	distneighb2, indneighb2 = tree.query(ptset[i,:], k = 20)
-	normm += np.linalg.norm(indneighb1[i,:] - indneighb2)
-
-print(normm)
-
-sys.exit()
-"""
-
 cov_fct = TPS.fast_mtrx
 polblocksize = 1 + dim
 
 precon_vals, precon_rowidx, precon_colidx, num_neighb = LocalLagrange.precon(ptset, loc_radius, cov_fct, polblocksize)
-#precon_vals2, precon_rowidx2, precon_colidx2, num_neighb2 = LocalLagrange.precon_alt(ptset, loc_radius, cov_fct, polblocksize)
-
-#print("vals", precon_vals - precon_vals2)
-#print("rows", precon_rowidx - precon_rowidx2, "---", np.linalg.norm(precon_rowidx - precon_rowidx2))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#sys.exit()
 
 precon = scipy.sparse.coo_matrix((precon_vals, (precon_rowidx, precon_colidx)), shape=(num_pts + polblocksize, num_pts + polblocksize))
 
