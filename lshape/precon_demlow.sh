@@ -1,5 +1,6 @@
-cd $1
-cd ../../H2Lib/
+cd $2
+
+
 make -j 
 
 cd ../gp-emulators/lshape/
