@@ -1,0 +1,25 @@
+
+Creating kernelmatrix object for 129 points (92 neighbours), interpolation order 9
+	0.00 seconds
+Loading mesh from txt file
+	0.00 seconds
+Creating clustergeometry, cluster and block tree
+	0.00 seconds
+Creating and filling cluster basis
+	0.00 seconds
+Loading preconditioner
+	0.01 seconds
+	0.1 MB
+	1.1 KB/DoF
+Creating, filling and recompressing H^2-matrix (and polblock)
+	0.00 seconds
+	0.1 MB
+	1.0 KB/DoF
+Computing GMRES
+	0.00 seconds
+	6 iterations
+	4.5e-06 relative error
+Approximating RMSE
+	0.00 seconds
+	3.4e-06 rmse
+
