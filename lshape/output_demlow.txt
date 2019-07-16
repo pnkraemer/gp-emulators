@@ -1,4 +1,20 @@
 
+Initialising
+	N = 129
+	n = 92 (C = 20.0)
+Memory footprint of ptset:
+	0.0 MB
+Memory footprint  of sparse matrix:
+	0.1 MB
+Memory footprint of full matrix:
+	0.1 MB
+Saving...
+	complete
+
+Computing GMRES
+	6 iterations
+
+
 Creating kernelmatrix object for 129 points (92 neighbours), interpolation order 9
 	0.00 seconds
 Loading mesh from txt file
@@ -22,4 +38,76 @@ Computing GMRES
 Approximating RMSE
 	0.00 seconds
 	3.4e-06 rmse
+
+
+Initialising
+	N = 1025
+	n = 184 (C = 20.0)
+Memory footprint of ptset:
+	0.0 MB
+Memory footprint  of sparse matrix:
+	1.4 MB
+Saving...
+	complete
+
+
+Creating kernelmatrix object for 1025 points (184 neighbours), interpolation order 18
+	0.00 seconds
+Loading mesh from txt file
+	0.00 seconds
+Creating clustergeometry, cluster and block tree
+	0.00 seconds
+Creating and filling cluster basis
+	0.03 seconds
+Loading preconditioner
+	0.45 seconds
+	2.2 MB
+	2.2 KB/DoF
+Creating, filling and recompressing H^2-matrix (and polblock)
+	0.35 seconds
+	8.0 MB
+	8.0 KB/DoF
+Computing GMRES
+	0.02 seconds
+	9 iterations
+	2.7e-06 relative error
+Approximating RMSE
+	0.00 seconds
+	2.2e-06 rmse
+
+
+Initialising
+	N = 3350
+	n = 251 (C = 20.0)
+Memory footprint of ptset:
+	0.1 MB
+Memory footprint  of sparse matrix:
+	6.4 MB
+Saving...
+	complete
+
+
+Creating kernelmatrix object for 3350 points (251 neighbours), interpolation order 25
+	0.00 seconds
+Loading mesh from txt file
+	0.00 seconds
+Creating clustergeometry, cluster and block tree
+	0.00 seconds
+Creating and filling cluster basis
+	0.32 seconds
+Loading preconditioner
+	4.27 seconds
+	9.6 MB
+	2.9 KB/DoF
+Creating, filling and recompressing H^2-matrix (and polblock)
+	4.58 seconds
+	85.6 MB
+	26.2 KB/DoF
+Computing GMRES
+	0.13 seconds
+	11 iterations
+	1.5e-06 relative error
+Approximating RMSE
+	0.00 seconds
+	1.2e-06 rmse
 
