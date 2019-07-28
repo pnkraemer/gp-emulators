@@ -1,9 +1,6 @@
 
 # run as:
-# bash precon_uniform_lshape <path_to_files> <path_to_h2lib> <rank_for_h2lib_approx> <gmres_acc>
-
-cd $2
-make -j
+# bash precon_uniform_lshape <path_to_files> <rank_for_h2lib_approx> <gmres_acc>
 
 cd ../gp-emulators/lshape/
 
@@ -37,7 +34,7 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 225 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/clean_lshape_gmres $1 225 113 $2 $3 |& tee -a output_uniform_lshape.txt
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 225 85 $2 $3 |& tee -a output_uniform_lshape.txt
 
 echo ---------------------------------------------------
 echo                     833
