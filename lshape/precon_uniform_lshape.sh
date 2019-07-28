@@ -70,12 +70,3 @@ echo ---------------------------------------------------
 time python3 makeprecon_tps2d.py $1 49665 |& tee -a output_uniform_lshape.txt
 
 time ./../../H2Lib/lshape/clean_lshape_gmres $1 49665 333 $2 $3 |& tee -a output_uniform_lshape.txt
-
-
-
-echo ---------------------------------------------------
-echo                     197633
-echo ---------------------------------------------------
-time python3 makeprecon_tps2d.py $1 197633 |& tee -a output_uniform_lshape.txt
-
-time ./../../H2Lib/lshape/clean_lshape_gmres $1 197633 423 $2 $3 |& tee -a output_uniform_lshape.txt
