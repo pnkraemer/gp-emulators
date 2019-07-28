@@ -1,9 +1,9 @@
 
 # run as:
-# bash precon_uniform_lshape <path_to_files> <path_to_h2lib>
+# bash precon_uniform_lshape <path_to_files> <path_to_h2lib> <rank_for_h2lib_approx> <gmres_acc>
 
 cd $2
-make -j 
+make -j
 
 cd ../gp-emulators/lshape/
 
@@ -18,9 +18,9 @@ echo ---------------------------------------------------
 echo                     21
 echo ---------------------------------------------------
 
-time python3 makeprecon_tps2d.py $1 21 |& tee -a output_uniform_lshape.txt 
+time python3 makeprecon_tps2d.py $1 21 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 21 24 5 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 21 24 $2 $3 |& tee -a output_uniform_lshape.txt
 
 
 echo ---------------------------------------------------
@@ -29,7 +29,7 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 65
 
-time ./../../H2Lib/lshape/lshape_gmres $1 65 68 6 >> output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 65 68 $2 $3 >> output_uniform_lshape.txt
 
 echo ---------------------------------------------------
 echo                     225
@@ -37,7 +37,7 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 225 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 225 113 11 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 225 113 $2 $3 |& tee -a output_uniform_lshape.txt
 
 echo ---------------------------------------------------
 echo                     833
@@ -45,7 +45,7 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 833 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 833 173 17 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 833 130 $2 $3 |& tee -a output_uniform_lshape.txt
 
 echo ---------------------------------------------------
 echo                     3201
@@ -53,7 +53,7 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 3201 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 3201 248 25 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 3201 187 $2 $3 |& tee -a output_uniform_lshape.txt
 
 
 echo ---------------------------------------------------
@@ -62,7 +62,8 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 12545 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 12545 338 34 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 12545 254 $2 $3 |& tee -a output_uniform_lshape.txt
+
 
 
 echo ---------------------------------------------------
@@ -71,15 +72,13 @@ echo ---------------------------------------------------
 
 time python3 makeprecon_tps2d.py $1 49665 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 49665 444 44 |& tee -a output_uniform_lshape.txt  
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 49665 333 $2 $3 |& tee -a output_uniform_lshape.txt
+
 
 
 echo ---------------------------------------------------
 echo                     197633
 echo ---------------------------------------------------
-
 time python3 makeprecon_tps2d.py $1 197633 |& tee -a output_uniform_lshape.txt
 
-time ./../../H2Lib/lshape/lshape_gmres $1 197633 563 56 |& tee -a output_uniform_lshape.txt  
-
-
+time ./../../H2Lib/lshape/clean_lshape_gmres $1 197633 423 $2 $3 |& tee -a output_uniform_lshape.txt

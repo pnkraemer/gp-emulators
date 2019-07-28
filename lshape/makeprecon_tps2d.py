@@ -28,7 +28,7 @@ from misc import *
 
 save_txt = True
 perf_thresh = 1000
-loc_radius = 20
+loc_radius = 15
 dim = 2
 
 num_pts = int(sys.argv[2])
