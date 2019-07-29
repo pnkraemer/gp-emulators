@@ -24,11 +24,11 @@ Creating clustergeometry, cluster and block tree
 Creating and filling cluster basis
 	0.03 seconds
 Loading preconditioner
-	0.02 seconds
+	0.03 seconds
 	0.0 MB
 	0.3 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	0.66 seconds
+	0.82 seconds
 	0.0 MB (0.0 MB for full matrix)
 	0.2 KB/DoF
 Preparing, solving and evaluating linear system
@@ -36,17 +36,17 @@ Preparing, solving and evaluating linear system
 	1 GMRES iterations with the H2-matrix
 	6.129403846877e-15 relative error
 Approximating RMSE
-	4.22 seconds
+	4.67 seconds
 	4.35e-15 rmse
 
 Creating kernelmatrix object for 65 points (68 neighbours), interpolation order 20
 	0.00 seconds
 Loading mesh from txt file
-	0.00 seconds
+	0.02 seconds
 Creating clustergeometry, cluster and block tree
 	0.00 seconds
 Creating and filling cluster basis
-	0.13 seconds
+	0.14 seconds
 Loading preconditioner
 Error reading file
 
@@ -73,22 +73,22 @@ Loading mesh from txt file
 Creating clustergeometry, cluster and block tree
 	0.00 seconds
 Creating and filling cluster basis
-	0.45 seconds
+	0.49 seconds
 Loading preconditioner
-	2.84 seconds
+	1.44 seconds
 	0.2 MB
 	1.0 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	3.67 seconds
+	1.92 seconds
 	0.4 MB (0.4 MB for full matrix)
 	1.8 KB/DoF
 Preparing, solving and evaluating linear system
-	0.29 seconds
-	11 GMRES iterations with the H2-matrix
-	8.663651182147e-10 relative error
+	0.07 seconds
+	8 GMRES iterations with the H2-matrix
+	7.054673239918e-06 relative error
 Approximating RMSE
-	5.94 seconds
-	7.16e-10 rmse
+	5.68 seconds
+	9.53e-06 rmse
 
 Initialising
 	N = 833
@@ -103,32 +103,32 @@ Saving...
 	complete
 
 Computing GMRES
-	10 iterations
+	11 iterations
 
 
 Creating kernelmatrix object for 833 points (130 neighbours), interpolation order 20
-	0.01 seconds
+	0.00 seconds
 Loading mesh from txt file
-	0.01 seconds
+	0.02 seconds
 Creating clustergeometry, cluster and block tree
 	0.00 seconds
 Creating and filling cluster basis
-	3.89 seconds
+	4.22 seconds
 Loading preconditioner
-	0.31 seconds
+	0.89 seconds
 	1.2 MB
 	1.5 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	10.49 seconds
+	11.63 seconds
 	5.3 MB (5.3 MB for full matrix)
 	6.5 KB/DoF
 Preparing, solving and evaluating linear system
-	0.43 seconds
-	12 GMRES iterations with the H2-matrix
-	2.379428849361e-09 relative error
+	0.39 seconds
+	9 GMRES iterations with the H2-matrix
+	2.720878381327e-06 relative error
 Approximating RMSE
-	7.58 seconds
-	2.33e-09 rmse
+	7.99 seconds
+	2.17e-06 rmse
 
 Initialising
 	N = 3201
@@ -144,26 +144,26 @@ Saving...
 Creating kernelmatrix object for 3201 points (187 neighbours), interpolation order 20
 	0.00 seconds
 Loading mesh from txt file
-	0.14 seconds
+	0.10 seconds
 Creating clustergeometry, cluster and block tree
-	0.02 seconds
+	0.03 seconds
 Creating and filling cluster basis
-	4.87 seconds
+	4.83 seconds
 Loading preconditioner
-	2.47 seconds
+	2.56 seconds
 	6.9 MB
 	2.2 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	144.66 seconds
+	135.38 seconds
 	69.5 MB (78.2 MB for full matrix)
 	22.2 KB/DoF
 Preparing, solving and evaluating linear system
-	6.88 seconds
-	15 GMRES iterations with the H2-matrix
-	1.997903447048e-09 relative error
+	3.87 seconds
+	10 GMRES iterations with the H2-matrix
+	9.064335631491e-06 relative error
 Approximating RMSE
-	15.73 seconds
-	3.09e-09 rmse
+	15.84 seconds
+	1.58e-05 rmse
 
 Initialising
 	N = 12545
@@ -179,26 +179,26 @@ Saving...
 Creating kernelmatrix object for 12545 points (254 neighbours), interpolation order 20
 	0.01 seconds
 Loading mesh from txt file
-	0.38 seconds
+	0.32 seconds
 Creating clustergeometry, cluster and block tree
 	0.12 seconds
 Creating and filling cluster basis
-	5.46 seconds
+	5.61 seconds
 Loading preconditioner
-	23.95 seconds
+	23.84 seconds
 	36.5 MB
 	3.0 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	1478.37 seconds
-	484.4 MB (1200.7 MB for full matrix)
+	1521.88 seconds
+	483.8 MB (1200.7 MB for full matrix)
 	39.5 KB/DoF
 Preparing, solving and evaluating linear system
-	46.52 seconds
-	18 GMRES iterations with the H2-matrix
-	6.157562799455e-09 relative error
+	36.15 seconds
+	14 GMRES iterations with the H2-matrix
+	7.224986667313e-06 relative error
 Approximating RMSE
-	45.39 seconds
-	3.91e-09 rmse
+	45.54 seconds
+	6.04e-06 rmse
 
 Initialising
 	N = 49665
@@ -212,25 +212,25 @@ Saving...
 
 
 Creating kernelmatrix object for 49665 points (333 neighbours), interpolation order 20
-	0.05 seconds
+	0.03 seconds
 Loading mesh from txt file
-	1.53 seconds
+	1.35 seconds
 Creating clustergeometry, cluster and block tree
-	1.48 seconds
+	0.56 seconds
 Creating and filling cluster basis
-	7.22 seconds
+	8.00 seconds
 Loading preconditioner
-	232.34 seconds
+	225.71 seconds
 	189.5 MB
 	3.9 KB/DoF
 Creating, filling and compressing H^2-matrix (and polblock)
-	9147.49 seconds
-	2514.6 MB (18818.8 MB for full matrix)
-	51.8 KB/DoF
+	9145.91 seconds
+	2507.8 MB (18818.8 MB for full matrix)
+	51.7 KB/DoF
 Preparing, solving and evaluating linear system
-	321.51 seconds
-	24 GMRES iterations with the H2-matrix
-	2.257021526453e-09 relative error
+	224.01 seconds
+	18 GMRES iterations with the H2-matrix
+	4.737914499886e-06 relative error
 Approximating RMSE
-	160.49 seconds
-	7.03e-09 rmse
+	161.62 seconds
+	1.24e-05 rmse
