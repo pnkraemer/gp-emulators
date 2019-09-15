@@ -7,8 +7,8 @@ class LocalLagrange:
 	"""
 	Computes preconditioner in sparsematrix format by finding
 	a fixed amount of neighbours for each node
-	NOTE: use "precon_nn" instead of "precon_n" to distinguish 
-	from "precon_h" below
+	NOTE: use "precon_nn" instead of "precon_n" to visually distinguish 
+	the script from "precon_h" below
 	"""
 	@staticmethod
 	def precon_nn(ptSet, numNeighb, kernelMtrxFct, polBlockSize):
@@ -59,8 +59,36 @@ class LocalLagrange:
 		return preconVals, preconRowIdx, preconColIdx
 
 
+	"""
+	Computes preconditioner in sparsematrix format by using a fixed amount of neighbours for each node
+	"""
+	@staticmethod
+	def precon_hvec(ptSet, radius_vec, kernelMtrxFct, polBlockSize):
+		tree = scipy.spatial.KDTree(ptSet)
+		numPts = len(ptSet)
+		preconVals = np.array([])
+		preconRowIdx = np.array([])
+		preconColIdx = np.array([])
+		for idx in range(numPts):
+			indNeighb = tree.query_ball_point(ptSet[idx,:], r = radius_vec[idx])
+			indNeighb = np.array(indNeighb)
+			locKernelMtrx = kernelMtrxFct(ptSet[indNeighb,:], ptSet[indNeighb,:])
+			locRhs = np.zeros(len(locKernelMtrx))
+			locRhs[np.where(indNeighb==idx)] = 1 # tree.query gives indices out unordered
+			lu, piv = scipy.linalg.lu_factor(locKernelMtrx)
+			locCoeff = scipy.linalg.lu_solve((lu, piv), locRhs)
+			preconVals = np.append(preconVals, locCoeff)
+			preconRowIdx = np.append(preconRowIdx, indNeighb)
+			preconRowIdx = np.append(preconRowIdx, numPts + np.arange(polBlockSize))
+			preconColIdx = np.append(preconColIdx, idx * np.ones(len(indNeighb) + polBlockSize))
+		return preconVals, preconRowIdx, preconColIdx
+
+
 
 """
+##########################
+Below is an old, outdated version
+##########################
 	# depreciated
 	@staticmethod
 	def precon_alt(ptSet, radius, kernelMtrxFct, polBlockSize):
