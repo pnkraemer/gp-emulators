@@ -1,6 +1,8 @@
 """
 NAME: pointsets.py
 
+Creates pointsets, mostly on [0,1]^d
+
 AUTHOR: NK
 """
 
@@ -15,6 +17,7 @@ class Random():
 
     @staticmethod
     def construct(num_pts, dim):
+        assert(num_pts > 0 and dim > 0), "Please enter positive numbers"
         return np.random.rand(num_pts, dim)
 
 """
@@ -24,6 +27,7 @@ class Mesh1d():
 
     @staticmethod
     def construct(num_pts):
+        assert(num_pts > 0), "Please enter positive numbers"
         points = np.zeros((num_pts, 1))
         points[:,0] = np.linspace(0,1,num_pts)
         return points
@@ -31,9 +35,12 @@ class Mesh1d():
 # stolen from https://laszukdawid.com/2017/02/04/halton-sequence-in-python/
 class Halton():
 
+    """
+    Construct Halton pointset
+    """
     @staticmethod
-    def construct_withzero(num_pts, dim):
-        
+    def construct(num_pts, dim):
+
         def nextPrime():
             
             def isPrime(num):
@@ -64,39 +71,11 @@ class Halton():
         return np.array(seq).T
 
     """
-    Construct Halton pointset, ignoring the first pt (0,0)
+    Construct Halton set, ignore first element (0, ..., 0)
     """
     @staticmethod
-    def construct(num_pts, dim):
-        num_pts = num_pts + 1
-        def nextPrime():
-            
-            def isPrime(num):
-                for i in range(2,int(num**0.5)+1):
-                    if(num % i)==0: return False
-                return True
-        
-            prime = 3
-            while(1):
-                if isPrime(prime):
-                    yield prime
-                prime += 2
-
-        def vanDerCorput(n, base=2):
-            vdc, denom = 0, 1
-            while n:
-                denom *= base
-                n, remainder = divmod(n, base)
-                vdc += remainder/float(denom)
-            return vdc
-
-        seq = []
-        primeGen = nextPrime()
-        next(primeGen)
-        for d in range(dim):
-            base = next(primeGen)
-            seq.append([vanDerCorput(i, base) for i in range(num_pts)])
-        pts = np.array(seq).T
+    def construct_withoutzero(num_pts, dim):
+        pts = Halton.construct(num_pts + 1, dim)
         return pts[1::, :]
 
 
