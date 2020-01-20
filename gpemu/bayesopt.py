@@ -8,14 +8,14 @@ from scipydirect import minimize as scdrmin
 from scipy.optimize import minimize
 from scipy.stats import norm
 
-from covariances import *
-from means import *
-from posterior import *
-from data import *
-from pointsets import *
-from gaussianprocesses import *
-from prior import *
-from gpvisual import *
+from gpemu.covariances import *
+from gpemu.means import *
+from gpemu.posterior import *
+from gpemu.data import *
+from gpemu.pointsets import *
+from gpemu.gaussianprocesses import *
+from gpemu.prior import *
+from gpemu.gpvisual import *
 
 
 """
