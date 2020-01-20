@@ -14,7 +14,7 @@ Nicholas Krämer, September 2019
 INSTRUCTIONS:
 run with:
 
-	python3 compute_precon_nn.py <path_to_mesh> <path_to_output_file> <num_neighb>
+python3 compute_precon_nn.py <path_to_mesh> <path_to_output_file> <num_neighb>
 
 where <> indicates a variable: usually a string, but <num_neighb> is an int. 
 Please make sure that the paths work; the outputfile will be created in the process.

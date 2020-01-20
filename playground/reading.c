@@ -4,12 +4,26 @@
 int main(){
 
     FILE *myFile;
+    char buffer[100];
+
+    // Count length of file
     myFile = fopen("test.txt", "r");
+    fgets(buffer, 100, myFile);
+    int counter = 0;
+    double dummy;
+    while (fscanf(myFile, "%lf", &dummy) != EOF){
+        counter++;
+    }
+
+    int numPts = counter;
+    fclose(myFile);
+    myFile = fopen("test.txt", "r");
+    fgets(buffer, 100, myFile);
+
 
     //read file into array
-    uint numPts = 100 * 3;
-    float numberArray1[numPts];
-    float numberArray2[numPts];
+    double numberArray1[numPts];
+    double numberArray2[numPts];
     int numberArray3[numPts];
     int i;
 
@@ -18,22 +32,21 @@ int main(){
         exit (0);
     }
 
-    char buffer[100];
-    fgets(buffer, 100, myFile);
-
-    float dummy;
+    double dum1, dum2, dum3;
 
     for (i = 0; i < (int)numPts/3.; i++){
-        fscanf(myFile, "%f", &numberArray1[i] );
-        fscanf(myFile, "%f", &numberArray2[i] );
-        fscanf(myFile, "%f", &dummy);
-        numberArray3[i] = (int)dummy;
-    }
+        fscanf(myFile, "%lf", &dum1);
+        fscanf(myFile, "%lf", &dum2);
+        fscanf(myFile, "%lf", &dum3);
 
-    printf("%s", buffer);
-    for (i = 0; i < (int)numPts/3.; i++){
+        numberArray1[i] = (float)dum1;
+        numberArray2[i] = (float)dum2;
+        numberArray3[i] = (int)dum3;
         printf("%f\t%f\t%u\n", numberArray1[i], numberArray2[i], numberArray3[i]);
     }
+
+    printf("%s\n", buffer);
+    printf("%u\n", counter);
 
 
     fclose(myFile);
