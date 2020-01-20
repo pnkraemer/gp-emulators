@@ -9,9 +9,9 @@ except ImportError:
     from distutils.core import setup
     from distutils.util import convert_path
 
-setup(name='gpemulators',
+setup(name='gpemu',
       version='1.01',
-      packages=['src'],
+      packages=['gpemu'],
       author='Nicholas Krämer',
       description='Gaussian process emulators and related methods',
       license='LICENSE.txt',

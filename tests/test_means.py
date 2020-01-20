@@ -1,7 +1,6 @@
-import sys
-sys.path.insert(0, "../")
-from means import *
-from pointsets import *
+
+from gpemu.means import *
+from gpemu.pointsets import *
 
 num_pts = 10
 dim = 1

@@ -8,10 +8,9 @@ that matern with nu = 99999 kinda equals gaussian
 
 import unittest
 import numpy as np
-import sys
-sys.path.insert(0, "../modules/")
-from covariances import *
-from pointsets import *
+
+from gpemu.covariances import *
+from gpemu.pointsets import *
 
 np.random.seed(15051994)
 

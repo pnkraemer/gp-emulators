@@ -7,7 +7,7 @@ NOTE: We only consider additive Gaussian noise
 """
 import sys
 import numpy as np
-from pointsets import Random, Mesh1d
+from gpemu.pointsets import Random, Mesh1d
 from scipy import interpolate
 import scipy.sparse
 import scipy.sparse.linalg

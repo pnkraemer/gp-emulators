@@ -7,8 +7,8 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 import numpy as np
 
-from pointsets import Mesh1d
-from gaussianprocesses import *
+from gpemu.pointsets import Mesh1d
+from gpemu.gaussianprocesses import *
 
 class GPVisual():
 

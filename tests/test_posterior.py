@@ -1,10 +1,9 @@
-import sys
-sys.path.insert(0, "../")
-from posterior import *
-from data import *
-from pointsets import *
-from gaussianprocesses import *
-from prior import *
+
+from gpemu.posterior import *
+from gpemu.data import *
+from gpemu.pointsets import *
+from gpemu.gaussianprocesses import *
+from gpemu.prior import *
 
 num_pts = 100
 dim = 1

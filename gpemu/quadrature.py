@@ -5,7 +5,7 @@ PURPOSE: Quadrature formulas on rectangular domains
 """
 
 import numpy as np
-from pointsets import Random, Lattice
+from gpemu.pointsets import Random, Lattice
 
 
 """

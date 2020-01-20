@@ -1,7 +1,5 @@
-import sys
 
-sys.path.insert(0, "../../modules")
-from pointsets import *
+from gpemu.pointsets import *
 
 from scipy.stats import norm
 import numpy as np

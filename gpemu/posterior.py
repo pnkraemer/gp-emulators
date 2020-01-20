@@ -5,15 +5,13 @@ NOTE: We only consider additive Gaussian noise
 """
 
 import numpy as np
-import sys
 
-sys.path.insert(0, "../../modules")
-from pointsets import *
-from data import Data, FEMInverseProblem
-from quadrature import MonteCarlo, QuasiMonteCarlo
-from means import ZeroMean
-from covariances import MaternCov
-from gaussianprocesses import GaussianProcess, ConditionedGaussianProcess
+from gpemu.pointsets import *
+from gpemu.data import Data, FEMInverseProblem
+from gpemu.quadrature import MonteCarlo, QuasiMonteCarlo
+from gpemu.means import ZeroMean
+from gpemu.covariances import MaternCov
+from gpemu.gaussianprocesses import GaussianProcess, ConditionedGaussianProcess
 
 class Posterior():
 

@@ -9,9 +9,9 @@ the conditioned gp should be an instance of gp
 """
 import numpy as np 
 
-from covariances import *
-from means import *
-from data import Data
+from gpemu.covariances import *
+from gpemu.means import *
+from gpemu.data import Data
 import sys
 import scipy.linalg
 

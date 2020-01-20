@@ -1,7 +1,6 @@
-import sys
-sys.path.insert(0, "../")
-from pointsets import *
-from data import *
+
+from gpemu.pointsets import *
+from gpemu.data import *
 
 
 def forward_map(pt):

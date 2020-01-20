@@ -1,9 +1,7 @@
-import sys
-sys.path.insert(0, "../")
 
-from gpvisual import *
-from gaussianprocesses import *
-from data import *
+from gpemu.gpvisual import *
+from gpemu.gaussianprocesses import *
+from gpemu.data import *
 
 
 np.random.seed(1)

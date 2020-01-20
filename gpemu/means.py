@@ -6,7 +6,7 @@ PURPOSE: Mean functions for Gaussian processes
 NOTE: definitions of covariances as in rasmussen/williams, chapter 4
 """
 import numpy as np
-from pointsets import Random
+from gpemu.pointsets import Random
 
 
 class Mean:

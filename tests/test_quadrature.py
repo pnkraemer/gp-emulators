@@ -1,7 +1,6 @@
-import sys
-sys.path.insert(0, "../")
-from quadrature import *
-from pointsets import *
+
+from gpemu.quadrature import *
+from gpemu.pointsets import *
 
 np.random.seed(2)
 

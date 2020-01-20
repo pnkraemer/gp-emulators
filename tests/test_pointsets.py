@@ -5,8 +5,7 @@ Test lattices better
 """
 
 import sys
-sys.path.insert(0, "../modules/")
-from pointsets import *
+from gpemu.pointsets import *
 
 import unittest
 

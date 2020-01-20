@@ -1,11 +1,11 @@
-import sys
-sys.path.insert(0, "../")
-from pointsets import *
-from data import *
-from gaussianprocesses import *
-from means import *
-from covariances import *
-from data import *
+
+
+from gpemu.pointsets import *
+from gpemu.data import *
+from gpemu.gaussianprocesses import *
+from gpemu.means import *
+from gpemu.covariances import *
+from gpemu.data import *
 
 zeromean = ZeroMean()
 materncov = MaternCov()
